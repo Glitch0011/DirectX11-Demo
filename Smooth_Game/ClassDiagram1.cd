@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SmoothGame::BillboardRendererComponent">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAIAAAAAAAAEAAAAAACAAAAAAA=</HashCode>
+      <FileName>Include\BillboardRendererComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::SphereCollider">
+    <Position X="11.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAACAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\Collider.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::GameObject">
+    <Position X="15.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAACABACMgIAAAEABREQgAAAEAAAAAAACAAIERAA=</HashCode>
+      <FileName>Include\Component.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::Component" Collapsed="true">
+    <Position X="10.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgAAAAAAAAAAQAAkABAEAAAAgAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Include\Component.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::ComputeComponent">
+    <Position X="13.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAIAACAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\ComputeComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::FPSControllerComponent">
+    <Position X="13.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\FPSControllerComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::GameEngine">
+    <Position X="18" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>oQYiAAASACAAAgBAgEACIhIwBwEioAkgAAACiAAEggA=</HashCode>
+      <FileName>Include\GameEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::SendAndRecieveWrapper">
+    <Position X="8" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAABAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Include\GameObject.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::HttpComponent">
+    <Position X="11.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\HttpComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::InputListenerComponent">
+    <Position X="8.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\InputListenerComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::KeyListenEvent">
+    <Position X="6.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAgAAEAgAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Include\KeyListenerComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::KeyListenerComponent">
+    <Position X="8" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\KeyListenerComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::LightComponent">
+    <Position X="4.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAACAAAAAAAAAAAAAgAIAAAgQAAAAAAAAAAA=</HashCode>
+      <FileName>Include\LightComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::SpotLightComponent">
+    <Position X="4.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\LightComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::DirectionLightComponent">
+    <Position X="6.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\LightComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::ModelRenderer">
+    <Position X="0.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>aAQCAAIRAgIAQBBAGEAIABAAEQACAgCACQAGhCAIgoA=</HashCode>
+      <FileName>Include\ModelRenderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::MouseListenEvent">
+    <Position X="6.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAgAAAAgAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\MouseListenerComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::MouseListenerComponent">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\MouseListenerComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::OnClickHighlight">
+    <Position X="15.75" Y="5.25" Width="1.5" />
+    <InheritanceLine Type="SmoothGame::Component" FixedToPoint="true">
+      <Path>
+        <Point X="11" Y="1.062" />
+        <Point X="11" Y="1.375" />
+        <Point X="15.75" Y="1.375" />
+        <Point X="15.75" Y="4.875" />
+        <Point X="16.625" Y="4.875" />
+        <Point X="16.625" Y="5.25" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\OnClickHighlight.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::PositionComponent">
+    <Position X="11.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\PositionComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::PositionalData">
+    <Position X="4.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAgAAKAIAACAAAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>Include\PositionData.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::Renderer">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAgAAACCAAAAAAA=</HashCode>
+      <FileName>Include\Renderer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::StructuredBufferComponent">
+    <Position X="11.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\StructuredBufferComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::UpdateComponent">
+    <Position X="13.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Include\UpdateComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmoothGame::XInputComponent">
+    <Position X="16" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAEAAAQABAIAAAAAgAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>Include\XInputComponent.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="SmoothGame::TimeConstantBuffer">
+    <Position X="6.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\ComputeComponent.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="SmoothGame::FPSControllerInput">
+    <Position X="4.5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAACgAAAAAAAAAAAAAAIAAAAAAAAAgAAgAA=</HashCode>
+      <FileName>Include\FPSControllerComponent.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="SmoothGame::MessageName" Collapsed="true">
+    <Position X="2.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\SmoothGameTypeDefs.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SmoothGame::Params" Collapsed="true">
+    <Position X="2.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\SmoothGameTypeDefs.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SmoothGame::Callback" Collapsed="true">
+    <Position X="2.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\SmoothGameTypeDefs.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SmoothGame::ToSendObject" Collapsed="true">
+    <Position X="2.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\SmoothGameTypeDefs.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="SmoothGame::ID_TYPE" Collapsed="true">
+    <Position X="2.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\SmoothGameTypeDefs.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="SmoothGame::LightType">
+    <Position X="2.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Include\LightComponent.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

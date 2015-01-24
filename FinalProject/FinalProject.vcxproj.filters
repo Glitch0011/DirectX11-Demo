@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Include">
+      <UniqueIdentifier>{1175010b-43c8-46eb-a2f6-dc39c98da212}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{e233e3e0-cc3c-4764-b5ff-620fe9ca6f87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{769eee5f-9776-4d79-9370-0d05e2ff7043}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Shaders\Billboard Rendering">
+      <UniqueIdentifier>{1e82149a-f914-4479-b955-991b69da9a1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Model Rendering">
+      <UniqueIdentifier>{d38ed9ee-c1b5-4f83-8686-ac4335266d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders\Quad Shader">
+      <UniqueIdentifier>{daa1236d-1fec-4581-a94b-2f60db31bac1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Include\Game.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\ColourHelper.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\BézierCurve.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\Basic_CS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Basic_GS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Basic_PS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Basic_VS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\SplitColour_CS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\CalcAccel.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Cube_GS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\ModelVertexShader.hlsl">
+      <Filter>Shaders\Model Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\ModelPixelShader.hlsl">
+      <Filter>Shaders\Model Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Quad_PS.hlsl">
+      <Filter>Shaders\Quad Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Quad_VS.hlsl">
+      <Filter>Shaders\Quad Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\ModelPixelSphereShader.hlsl">
+      <Filter>Shaders\Model Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\ModelGeometryShader.hlsl">
+      <Filter>Shaders\Model Rendering</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\VS_Input.hlsli">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </None>
+    <None Include="Shaders\ModelRendering.hlsli">
+      <Filter>Shaders\Model Rendering</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+</Project>

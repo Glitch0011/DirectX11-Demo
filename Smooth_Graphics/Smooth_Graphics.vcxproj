@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{467D6896-7BA1-4AAA-88F5-F4E9084ABA71}</ProjectGuid>
+    <RootNamespace>GL_Graphics</RootNamespace>
+    <ProjectName>Smooth_Graphics</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\SmoothLibrarySheet.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\SmoothLibrarySheet.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(WindowsSDK_IncludePath);$(SolutionDir)Smooth_Hardware\Include;$(SolutionDir)tinyobjloader;$(SolutionDir)assimp-3.1.1\include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib />
+    <Lib />
+    <ProjectReference />
+    <ProjectReference />
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(WindowsSDK_IncludePath);$(SolutionDir)Smooth_Hardware\Include;$(SolutionDir)tinyobjloader;$(SolutionDir)assimp-3.1.1\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\CachedVariable.h" />
+    <ClInclude Include="Include\DepthTextureBuffer.h" />
+    <ClInclude Include="Include\IndexBuffer.h" />
+    <ClInclude Include="Include\LightController.h" />
+    <ClInclude Include="Include\LightData.h" />
+    <ClInclude Include="Include\MappedGpuMemory.h" />
+    <ClInclude Include="Include\MessageController.h" />
+    <ClInclude Include="Include\Model.h" />
+    <ClInclude Include="Include\ModelController.h">
+      <FileType>CppHeader</FileType>
+    </ClInclude>
+    <ClCompile Include="Source\BufferController.cpp" />
+    <ClCompile Include="Source\ConstantBuffer.cpp" />
+    <ClCompile Include="Source\LightController.cpp" />
+    <ClCompile Include="Source\ModelController.cpp" />
+    <ClCompile Include="Source\SimpleVertex.cpp" />
+    <ClCompile Include="Source\VertexBufferController.cpp" />
+    <ClInclude Include="Include\BillboardVertexBuffer.h" />
+    <ClInclude Include="Include\Buffer.h" />
+    <ClInclude Include="Include\BufferController.h" />
+    <ClInclude Include="Include\ConstantBuffer.h" />
+    <ClInclude Include="Include\DirectXHelper.h" />
+    <ClInclude Include="Include\GraphicsEngine.h" />
+    <ClInclude Include="Include\NamedResource.h" />
+    <ClInclude Include="Include\PickingData.h" />
+    <ClInclude Include="Include\Shader.h" />
+    <ClInclude Include="Include\ShaderController.h" />
+    <ClInclude Include="Include\SimpleVertex.h" />
+    <ClInclude Include="Include\SmoothGraphicsTypeDefs.h" />
+    <ClInclude Include="Include\StructuredBuffer.h" />
+    <ClInclude Include="Include\TextureBuffer.h" />
+    <ClInclude Include="Include\TextureController.h" />
+    <ClInclude Include="Include\VertexBuffer.h" />
+    <ClInclude Include="Include\VertexBufferController.h" />
+    <ClCompile Include="Source\BillboardVertexBuffer.cpp" />
+    <ClCompile Include="Source\VertexBuffer.cpp">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\GraphicsEngine.cpp" />
+    <ClCompile Include="Source\ShaderController.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smooth_Hardware\Smooth_Hardware.vcxproj">
+      <Project>{f0021551-24ad-46ee-bd8c-c6f8a074ab70}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\tinyobjloader\tinyobjloader.vcxproj">
+      <Project>{30b055b7-4409-46cf-8d24-08aba57477ad}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
