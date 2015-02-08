@@ -25,3 +25,11 @@
 *.exe
 *.out
 *.app
+FinalProject/Release/
+tinyobjloader/Release/
+Smooth_Hardware/Release/Smooth_Hardware.tlog/Smooth_Hardware.lastbuildstate
+Smooth_Hardware/Release/
+Smooth_Graphics/Release/
+Smooth_Game/Release/
+3DApps.opensdf
+3DApps.sdf
