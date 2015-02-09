@@ -98,14 +98,16 @@ void GameEngine::calculatePerspectiveMatrix()
 	{
 		this->graphics->CalculateWidthAndHeight();
 
-		float fov = XM_PIDIV4;
+		/*float fov = XM_PIDIV4;
 		float aspect = (float)this->graphics->width / (float)this->graphics->height;
 		float farZ = 5000.0f;
 		float nearZ = 1.0f;
 
-		XMStoreFloat4x4(&this->projectionMatrix, XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ));
+		XMStoreFloat4x4(&this->projectionMatrix, XMMatrixPerspectiveFovLH(fov, aspect, nearZ, farZ));*/
 
-		frustum.setCamInternals(fov, aspect, nearZ, farZ);
+		XMStoreFloat4x4(&this->projectionMatrix, XMMatrixOrthographicLH(this->graphics->width, this->graphics->height, 0, 1));
+
+		//frustum.setCamInternals(fov, aspect, nearZ, farZ);
 
 		//this->graphics->Resize();
 	}

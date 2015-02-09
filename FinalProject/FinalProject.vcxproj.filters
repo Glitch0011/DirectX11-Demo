@@ -55,24 +55,6 @@
     <FxCompile Include="Shaders\Basic_CS.hlsl">
       <Filter>Shaders\Billboard Rendering</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\Basic_GS.hlsl">
-      <Filter>Shaders\Billboard Rendering</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\Basic_PS.hlsl">
-      <Filter>Shaders\Billboard Rendering</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\Basic_VS.hlsl">
-      <Filter>Shaders\Billboard Rendering</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\SplitColour_CS.hlsl">
-      <Filter>Shaders\Billboard Rendering</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\CalcAccel.hlsl">
-      <Filter>Shaders\Billboard Rendering</Filter>
-    </FxCompile>
-    <FxCompile Include="Shaders\Cube_GS.hlsl">
-      <Filter>Shaders\Billboard Rendering</Filter>
-    </FxCompile>
     <FxCompile Include="Shaders\ModelVertexShader.hlsl">
       <Filter>Shaders\Model Rendering</Filter>
     </FxCompile>
@@ -91,6 +73,24 @@
     <FxCompile Include="Shaders\ModelGeometryShader.hlsl">
       <Filter>Shaders\Model Rendering</Filter>
     </FxCompile>
+    <FxCompile Include="Shaders\SplitColour_CS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Basic_GS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Basic_PS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Basic_VS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\CalcAccel.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Cube_GS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VS_Input.hlsli">
@@ -99,6 +99,5 @@
     <None Include="Shaders\ModelRendering.hlsli">
       <Filter>Shaders\Model Rendering</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

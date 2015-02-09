@@ -6,5 +6,8 @@ PsOut main(PsIn input) : SV_TARGET
 
 	output.colour = input.col;
 
+	output.colour.y = 1;
+	output.colour.z = 1;
+
 	return output;
 }

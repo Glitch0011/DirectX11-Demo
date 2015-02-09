@@ -334,22 +334,24 @@ HRESULT GraphicsEngine::Render()
 	float ClearColor[4] = { 0.001f, 0.001f, 0.001f, 1.0f };
 	float ClearNormal[4] = { 0.000f, 0.000f, 0.000f, 0.000f };
 
-	IF_NOT_NULL(this->renderTargetView, immediateContext->ClearRenderTargetView(this->renderTargetView, ClearColor));
-	IF_NOT_NULL(colourRenderTarget, immediateContext->ClearRenderTargetView(colourRenderTarget->renderTargetView, ClearColor));
-	IF_NOT_NULL(normalRenderTarget, immediateContext->ClearRenderTargetView(normalRenderTarget->renderTargetView, ClearNormal));
-	IF_NOT_NULL(depthRenderTarget, immediateContext->ClearRenderTargetView(depthRenderTarget->renderTargetView, ClearNormal));
-	IF_NOT_NULL(stencilBuffer, immediateContext->ClearDepthStencilView(stencilBuffer->depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0));
+	/*IF_NOT_NULL(this->renderTargetView, immediateContext->ClearRenderTargetView(this->renderTargetView, ClearColor));
+	IF_NOT_NULL(this->colourRenderTarget, immediateContext->ClearRenderTargetView(this->colourRenderTarget->renderTargetView, ClearColor));
+	IF_NOT_NULL(this->normalRenderTarget, immediateContext->ClearRenderTargetView(this->normalRenderTarget->renderTargetView, ClearNormal));
+	IF_NOT_NULL(this->depthRenderTarget, immediateContext->ClearRenderTargetView(this->depthRenderTarget->renderTargetView, ClearNormal));
+	IF_NOT_NULL(this->stencilBuffer, immediateContext->ClearDepthStencilView(this->stencilBuffer->depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0));*/
 
-	this->SetDeferredRenderTargets();
+	//this->SetDeferredRenderTargets();
+
+	this->SetRenderTargetToBackBuffer();
+
+	immediateContext->ClearRenderTargetView(this->renderTargetView, ClearColor);
 
 	if (this->onRender)
 		this->onRender();
 
-	this->SetRenderTargetToBackBuffer();
+	//this->DrawDeferredQuad();
 
-	this->DrawDeferredQuad();
-
-	swapChain->Present(2, 0);
+	swapChain->Present(1, 0);
 
 	return S_OK;
 }
@@ -758,10 +760,10 @@ HRESULT GraphicsEngine::CreateRasterState()
 	rasterDesc.CullMode = D3D11_CULL_NONE;
 	rasterDesc.DepthBias = 0;
 	rasterDesc.DepthBiasClamp = 0.0f;
-	rasterDesc.DepthClipEnable = true;
+	rasterDesc.DepthClipEnable = false;
 	rasterDesc.FillMode = D3D11_FILL_SOLID;
 	rasterDesc.FrontCounterClockwise = false;
-	rasterDesc.MultisampleEnable = true;
+	rasterDesc.MultisampleEnable = false;
 	rasterDesc.ScissorEnable = false;
 	rasterDesc.SlopeScaledDepthBias = 0.0f;
 
