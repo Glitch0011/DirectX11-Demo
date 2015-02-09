@@ -1,8 +1,6 @@
 struct Buff
 {
 	float4 Pos;
-	float3 Rotation;
-	float3 Scale;
 	float4 Col;
 	float4 Vel;
 };
@@ -12,19 +10,19 @@ struct MovingParticleData
 	float3 Accel;
 	float3 Target;
 	float4 TargetCol;
-	float3 TargetRotation;
-	float3 TargetScale;
 };
 
 struct VsIn
 {
-	float4 Pos : POSITION;
+	float2 Pos : POSITION;
+	float2 texCoord : TEXCOORD0;
 };
 
 struct VsOut
 {
 	float4 Pos : SV_POSITION;
 	float4 col : COLOR;
+	float2 texCoord : TEXCOORD0;
 };
 
 struct GsIn
@@ -43,6 +41,7 @@ struct PsIn
 {
 	float4 pos : SV_POSITION;
 	float4 col : COLOR;
+	float2 texCoord : TEXCOORD0;
 };
 
 struct PsOut

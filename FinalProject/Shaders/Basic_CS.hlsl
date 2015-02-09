@@ -1,9 +1,20 @@
-RWStructuredBuffer<float3> positions;
+#include <VS_Input.hlsli>
 
-[numthreads(1, 1, 1)]
-void main( uint3 DTid : SV_DispatchThreadID )
+RWStructuredBuffer<Buff> positionData : register(t0);
+RWStructuredBuffer<MovingParticleData> movingData : register(t1);
+
+cbuffer CS_ConstantBuffer : register(b0)
 {
-	int id = DTid.x + DTid.y + DTid.z;
+	double time;
+	double timeTotal;
+}
 
-	positions[id].x = positions[id].x * 0.1f;
+[numthreads(32, 32, 1)]
+void main(uint3 DTid : SV_DispatchThreadID)
+{
+	const unsigned int id = DTid.x + DTid.y + DTid.z;
+
+	float3 vec = normalize(movingData[id].Target - positionData[id].Pos) * time;
+
+	positionData[id].Pos.xyz += vec;
 }

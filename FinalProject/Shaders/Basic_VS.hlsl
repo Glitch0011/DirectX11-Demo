@@ -19,6 +19,8 @@ VsOut main(VsIn input, uint instanceID : SV_InstanceID, uint ID : SV_VertexID)
 
 	output.Pos = ParticlesRO[instanceID].Pos;
 
+	output.Pos.xy += input.Pos;
+
 	output.Pos = mul(output.Pos, World);
 
 	output.Pos = mul(output.Pos, View);
@@ -27,6 +29,8 @@ VsOut main(VsIn input, uint instanceID : SV_InstanceID, uint ID : SV_VertexID)
 
 	output.Pos.z = 0.5;
 	output.Pos.w = 0.5;
+
+	output.texCoord = input.texCoord;
 
 	output.col = ParticlesRO[instanceID].Col;
 

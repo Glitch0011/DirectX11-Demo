@@ -100,12 +100,15 @@ public:
 						}),
 			}));
 
+			int size = 1024;
+			int batchSize = size / 32;
 			this->engine->AddObject(L"particles", {
 				new PositionComponent([](PositionalData* data)
 				{
 
 				}),
-				new BillboardRendererComponent(10000),
+				new BillboardRendererComponent(size),
+				new ComputeComponent(XMINT3(batchSize, batchSize, 1)),
 			});
 
 			//Load the previous settings

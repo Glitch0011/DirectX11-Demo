@@ -7,8 +7,6 @@ namespace SmoothGraphics
 	struct SimpleVertex
 	{
 		DirectX::XMFLOAT4 Pos;
-		DirectX::XMFLOAT3 Rotation;
-		DirectX::XMFLOAT3 Scale;
 		DirectX::XMFLOAT4 Colour;
 		DirectX::XMFLOAT4 Vel;
 
@@ -17,12 +15,29 @@ namespace SmoothGraphics
 		SimpleVertex();
 	};
 
+	struct SimpleRenderVertex
+	{
+		DirectX::XMFLOAT2 Pos;
+		DirectX::XMFLOAT2 Tex;
+
+		SimpleRenderVertex(float x, float y, float tx, float ty)
+		{
+			this->Pos.x = x;
+			this->Pos.y = y;
+			this->Tex.x = x;
+			this->Tex.y = y;
+		}
+
+		SimpleRenderVertex()
+		{
+
+		}
+	};
+
 	struct MovingParticleData
 	{
 		DirectX::XMFLOAT3 Accel;
 		DirectX::XMFLOAT3 Target;
 		DirectX::XMFLOAT4 TargetColour;
-		DirectX::XMFLOAT3 TargetRotation;
-		DirectX::XMFLOAT3 TargetScale;
 	};
 }

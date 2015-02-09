@@ -1,6 +1,7 @@
 #include <direct.h>
 #include <GraphicsEngine.h>
 #include <Component.h>
+#include <Renderer.h>
 
 using namespace SmoothGraphics;
 
@@ -12,14 +13,14 @@ namespace SmoothGame
 		double timePassed;
 	};
 
-	class ComputeComponent : public Component
+	class ComputeComponent : public Renderer
 	{
 	private:
-		GraphicsEngine* graphics;
 		std::wstring shaderName;
 		XMINT3 batchSize;
 
 	public:
-		ComputeComponent(GraphicsEngine* graphics, std::wstring shaderName, XMINT3 batchSize);
+		ComputeComponent(XMINT3 batchSize);
+		HRESULT Init();
 	};
 }

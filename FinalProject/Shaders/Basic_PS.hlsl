@@ -1,13 +1,17 @@
 #include <VS_Input.hlsli>
 
+Texture2D pixelTexture : register(t0);
+
+SamplerState samplerState;
+
 PsOut main(PsIn input) : SV_TARGET
 {
 	PsOut output;
 
-	output.colour = input.col;
+	output.colour = pixelTexture.Sample(samplerState, input.texCoord);
 
-	output.colour.y = 1;
-	output.colour.z = 1;
+	output.colour.r = 1;
+	output.colour.a = 0;
 
 	return output;
 }
