@@ -12,6 +12,7 @@ using namespace SmoothGraphics;
 using namespace std;
 
 #include <GameObject.h>
+#include <PngFile.h>
 
 float lerp(float v0, float v1, float t) 
 {
@@ -29,7 +30,10 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 	XMFLOAT2 square_size = XMFLOAT2(500, 500);
 
 	this->size = size;
-		
+
+	samplerState = CachedVariable<ID3D11SamplerState>(TO_FUNCTION(this->graphics->samplerStates[L"samplerState"]));
+	texture = CachedVariable<TextureBuffer>(TO_FUNCTION(this->graphics->GetResource<TextureBuffer>(L"texture")));
+
 	this->functions[L"Render"] = [=](Params param) mutable
 	{
 		if (this->objData == nullptr)
@@ -42,19 +46,21 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 		}
 		else if (this->objData != (PositionalData*)0xFFFFFFFF)
 		{
+			auto context = this->graphics->immediateContext;
+
 			auto shader = dynamic_cast<VertexShader*>((*graphics->shaderController)[L"Basic_VS"]);
 			if (shader != nullptr)
-				this->graphics->immediateContext->IASetInputLayout(shader->GetInputLayout());
+				context->IASetInputLayout(shader->GetInputLayout());
 			else
 				return S_OK;
 
 			//Setup the shaders
-			this->graphics->shaderController->Get(L"Basic_VS")->Set(this->graphics->immediateContext);
-			this->graphics->shaderController->Get(L"Basic_PS")->Set(this->graphics->immediateContext);
+			this->graphics->shaderController->Get(L"Basic_VS")->Set(context);
+			this->graphics->shaderController->Get(L"Basic_PS")->Set(context);
 
 			//Apply the constant buffers
-			this->graphics->immediateContext->VSSetConstantBuffers(0, 1, &this->graphics->bufferController->Get(L"BasicConstantBuffer")->buffer);
-			this->graphics->immediateContext->VSSetConstantBuffers(1, 1, &this->graphics->bufferController->Get(L"QuickBasicConstantBuffer")->buffer);
+			context->VSSetConstantBuffers(0, 1, &this->graphics->bufferController->Get(L"BasicConstantBuffer")->buffer);
+			context->VSSetConstantBuffers(1, 1, &this->graphics->bufferController->Get(L"QuickBasicConstantBuffer")->buffer);
 
 			//Calculate world matrix
 			auto worldMatrix =
@@ -64,12 +70,14 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 				XMMatrixRotationY(objData->Rotation()->y) *
 				XMMatrixRotationZ(objData->Rotation()->z);
 
-			worldMatrix = XMMatrixIdentity();
+			auto scale = 60;
+			auto src = XMFLOAT3(scale, scale, scale);
+			worldMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&src));
 
 			//Upload the world matrix to GPU
 
 			{
-				MappedGpuMemory mappedMemory(this->graphics->immediateContext, this->graphics->bufferController->Get(L"QuickBasicConstantBuffer")->Get());
+				MappedGpuMemory mappedMemory(context, this->graphics->bufferController->Get(L"QuickBasicConstantBuffer")->Get());
 
 				QuickBasicConstantBuffer b;
 				b.mWorld = worldMatrix;
@@ -79,7 +87,7 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 
 			//Set the shader resource
 			auto i = ((StructuredBuffer*)this->graphics->bufferController->Get(L"BasicBillboard"))->SRV();
-			this->graphics->immediateContext->VSSetShaderResources(0, 1, &i);
+			context->VSSetShaderResources(0, 1, &i);
 
 			//Set Top
 			this->graphics->SetTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
@@ -87,6 +95,9 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 			//Render
 			((IndexBuffer*)this->graphics->bufferController->Get(L"BasicIndexBuffer"))->Set(this->graphics->immediateContext);
 			((VertexBuffer*)this->graphics->bufferController->Get(L"BasicVertexBuffer"))->Set(this->graphics->immediateContext);
+
+			IF_NOT_NULL(samplerState, context->PSSetSamplers(0, 1, &samplerState.value));
+			IF_NOT_NULL(texture, context->PSSetShaderResources(0, 1, &texture->srvResourceView));
 
 			this->graphics->immediateContext->DrawIndexedInstanced(6, this->size, 0, 0, 0);
 
@@ -101,36 +112,37 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 		return S_OK;
 	};
 
-	this->functions[L"makeFlat"] = [=](Params params)
+	this->functions[L"makeImage"] = [=](Params params)
 	{
 		std::shared_future<void> asyncFunction = async(launch::async, [=]()
 		{
 			auto newData = new vector<MovingParticleData>(this->size);
 
-			auto randomEngine = new mt19937_64(); randomEngine->seed(clock());
-			auto distribution = new uniform_real_distribution<float>(0.0f, 1.0f);
+			SmoothHardware::PngFile pngFile(SmoothHardware::Path(L".\\Assets\\hi.png"));
 
-			for (UINT i = 0; i < newData->size(); i++)
+			int ratio = (int)sqrt(this->size);
+			int ratiox = ratio;
+			int ratioy = ratio;
+			int bX = pngFile.width / ratio;
+			int bY = pngFile.height / ratio;
+
+			MovingParticleData* head = newData->data();
+
+			float spacing = 10.0f;
+			float offset = -(((ratiox * bX) / 2) * spacing);
+			for (int x = 0; x < ratiox; x++)
 			{
-				(*newData)[i].Accel = XMFLOAT3(0, 0, 0);
-
-				XMFLOAT2 spacing = XMFLOAT2((float)(square_size.x / sqrt(this->size)), (float)(square_size.y / sqrt(this->size)));
-				auto perRow = sqrt(this->size);
-
-				auto x = (float)fmod(i, perRow) * spacing.x;
-				auto z = (float)floor(i / perRow) * spacing.y;
-
-				auto pos = XMFLOAT3(
-					-(((float)perRow * spacing.x) / 2.0f) + x,
-					(sin(x / 50.0) + cos(z / 50.0)) * 25,
-					-(((float)perRow * spacing.y) / 2.0f) + z);
-
-				(*newData)[i].Target = pos;
-
-				(*newData)[i].TargetColour = XMFLOAT4(sin(pos.x / 25.0f), cos(pos.y / 50.0f), cos(pos.z / 25.0f), 1);
+				for (int y = 0; y < ratioy; y++)
+				{
+					head->Accel = XMFLOAT3(0, 0, 0);
+					head->Target = XMFLOAT3(offset + ((x * bX) * spacing), offset + ((y * bY) * spacing), 0);
+					auto c = pngFile.Sample((1.0f / (float)ratiox)*x, (1.0f / (float)ratioy)*y);
+					head->TargetColour = XMFLOAT4(c.r, c.g, c.b, c.a);
+					head++;
+				}
 			}
 
-			this->DelayedSend(L"setLandspace", { newData });
+			this->DelayedSend(L"setData", { newData });
 		});
 		
 		return S_OK;
@@ -188,8 +200,8 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 	{
 		auto data = (vector<MovingParticleData>*)params[0];
 
-		StructuredBuffer* buffer = (StructuredBuffer*)this->graphics->bufferController;
-		buffer->Update(this->graphics->immediateContext, data->data());
+		this->graphics->Get<StructuredBuffer>(L"MovingParticleData")->
+			Update(this->graphics->immediateContext, data->data());
 
 		delete data;
 
@@ -231,9 +243,9 @@ HRESULT BillboardRendererComponent::Init()
 		SimpleRenderVertex v[]
 		{
 			SimpleRenderVertex(-0.5, -0.5, 0, 0),
-			SimpleRenderVertex(-0.5, 0.5, 1, 0),
+			SimpleRenderVertex(-0.5, 0.5, 0, 1),
 			SimpleRenderVertex(0.5, 0.5, 1, 1),
-			SimpleRenderVertex(0.5, -0.5, 0, 1),
+			SimpleRenderVertex(0.5, -0.5, 1, 0),
 		};
 		*vertex = v[index];
 		return S_OK;
@@ -244,7 +256,7 @@ HRESULT BillboardRendererComponent::Init()
 		int v[]
 		{
 			0, 1, 2,
-			0, 2, 3,
+			0, 3, 2,
 		};
 		*vertex = v[index];
 		return S_OK;

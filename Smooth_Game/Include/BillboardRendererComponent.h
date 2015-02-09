@@ -19,6 +19,9 @@ namespace SmoothGame
 
 		BillboardRendererComponent(int size);
 
+		CachedVariable<TextureBuffer> texture;
+		CachedVariable<ID3D11SamplerState> samplerState;
+
 		HRESULT Init();
 	};
 }

@@ -87,17 +87,25 @@ public:
 				{
 					*data->Position() = XMFLOAT3(0, 0, 0.5);
 				}),
-					new FPSControllerComponent(),
-					new XInputComponent(
-						1,
-						[=](Params params, XInputComponent* cThis)
-						{
-							if (cThis->GetState().Gamepad.bLeftTrigger)
-								cThis->Vibrate(60000, 60000);
-							else
-								cThis->Vibrate(0, 0);
-							return S_OK;
-						}),
+				new FPSControllerComponent(),
+				new XInputComponent(
+					1,
+					[=](Params params, XInputComponent* cThis)
+					{
+						if (cThis->GetState().Gamepad.bLeftTrigger)
+							cThis->Vibrate(60000, 60000);
+						else
+							cThis->Vibrate(0, 0);
+						return S_OK;
+					}),
+			}));
+
+			camera->AddComponent(new KeyListenerComponent(
+			{
+				KeyListenEvent(' ', [&]
+				{
+					this->engine->Send(L"makeImage");
+				}),
 			}));
 
 			int size = 1024;

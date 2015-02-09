@@ -643,6 +643,24 @@ HRESULT GraphicsEngine::CreateDepthStencilState()
 
 	//immediateContext->OMSetDepthStencilState(this->depthStencilState, 1);
 
+	ID3D11BlendState* d3dBlendState;
+	D3D11_BLEND_DESC omDesc;
+	ZeroMemory(&omDesc, sizeof(D3D11_BLEND_DESC));
+	omDesc.RenderTarget[0].BlendEnable = true;
+	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	omDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	omDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	omDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	if (FAILED(this->device->CreateBlendState(&omDesc, &d3dBlendState)))
+		return false;
+
+	this->immediateContext->OMSetBlendState(d3dBlendState, 0, 0xffffffff);
+
+
 	return S_OK;
 }
 
@@ -755,12 +773,12 @@ HRESULT GraphicsEngine::CreateRasterState()
 	D3D11_RASTERIZER_DESC rasterDesc;
 	ZeroMemory(&rasterDesc, sizeof(D3D11_RASTERIZER_DESC));
 
-	rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.AntialiasedLineEnable = true;
 	//rasterDesc.CullMode = D3D11_CULL_BACK;
 	rasterDesc.CullMode = D3D11_CULL_NONE;
 	rasterDesc.DepthBias = 0;
 	rasterDesc.DepthBiasClamp = 0.0f;
-	rasterDesc.DepthClipEnable = false;
+	rasterDesc.DepthClipEnable = true;
 	rasterDesc.FillMode = D3D11_FILL_SOLID;
 	rasterDesc.FrontCounterClockwise = false;
 	rasterDesc.MultisampleEnable = false;

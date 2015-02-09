@@ -20,6 +20,11 @@ using namespace std;
 
 namespace SmoothHardware
 {
+	struct Colour
+	{
+		float r, g, b, a;
+	};
+
 	typedef unsigned char UINT8;
 
 	class PngFile : public File
@@ -55,10 +60,23 @@ namespace SmoothHardware
 
 			for (UINT i = 0; i < image.size(); i++)
 			{
-				this->data[i] = (float)image[i]/255.0f;
+				this->data[i] =  ((float)image[i] / 255.0f);
 			}
 
 			return S_OK;
+		}
+
+		Colour Sample(float x, float y)
+		{
+			int pixelX = x * this->width;
+			int pixelY = (1 - y) * this->height;
+			float* head = &this->data[((this->width * pixelY) + pixelX) * 4];
+			Colour c;
+			c.r = *(head + 0);
+			c.g = *(head + 1);
+			c.b = *(head + 2);
+			c.a = *(head + 3);
+			return c;
 		}
 	};
 }

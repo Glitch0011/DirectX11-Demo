@@ -8,10 +8,7 @@ PsOut main(PsIn input) : SV_TARGET
 {
 	PsOut output;
 
-	output.colour = pixelTexture.Sample(samplerState, input.texCoord);
-
-	output.colour.r = 1;
-	output.colour.a = 0;
+	output.colour = pixelTexture.Sample(samplerState, input.texCoord) * input.col;
 
 	return output;
 }

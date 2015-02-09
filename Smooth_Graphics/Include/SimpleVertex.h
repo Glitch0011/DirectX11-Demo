@@ -24,8 +24,8 @@ namespace SmoothGraphics
 		{
 			this->Pos.x = x;
 			this->Pos.y = y;
-			this->Tex.x = x;
-			this->Tex.y = y;
+			this->Tex.x = tx;
+			this->Tex.y = ty;
 		}
 
 		SimpleRenderVertex()
