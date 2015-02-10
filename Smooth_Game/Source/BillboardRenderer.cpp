@@ -75,7 +75,6 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 			worldMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&src));
 
 			//Upload the world matrix to GPU
-
 			{
 				MappedGpuMemory mappedMemory(context, this->graphics->bufferController->Get(L"QuickBasicConstantBuffer")->Get());
 

@@ -108,14 +108,14 @@ public:
 				}),
 			}));
 
-			int size = 65536;
+			int size = 524288;
 			this->engine->AddObject(L"particles", {
 				new PositionComponent([](PositionalData* data)
 				{
 
 				}),
 				new BillboardRendererComponent(size),
-				new ComputeComponent(XMINT3(8, 8, 1)),
+				new ComputeComponent(XMINT3(8, 8, 8)),
 			});
 
 			//Load the previous settings
