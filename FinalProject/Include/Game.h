@@ -108,7 +108,7 @@ public:
 				}),
 			}));
 
-			int size = 524288;
+			int size = 8 * 8 * 8 * 16 * 16 * 4;
 			this->engine->AddObject(L"particles", {
 				new PositionComponent([](PositionalData* data)
 				{

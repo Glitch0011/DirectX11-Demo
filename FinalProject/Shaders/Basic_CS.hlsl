@@ -9,12 +9,10 @@ cbuffer CS_ConstantBuffer : register(b0)
 	double timeTotal;
 }
 
-#define GROUP_COUNT 8
-
 [numthreads(16, 16, 4)]
 void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 {
-	uint3 gUint3 = uint3(GROUP_COUNT, GROUP_COUNT, GROUP_COUNT);
+	uint3 gUint3 = uint3(8, 8, 8);
 	uint3 tUint3 = uint3(16, 16, 4);
 
 	const unsigned int groupMax = tUint3.x * tUint3.y * tUint3.z;
