@@ -70,7 +70,7 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 				XMMatrixRotationY(objData->Rotation()->y) *
 				XMMatrixRotationZ(objData->Rotation()->z);
 
-			auto scale = 60;
+			auto scale = 10;
 			auto src = XMFLOAT3(scale, scale, scale);
 			worldMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&src));
 
@@ -120,13 +120,20 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 
 			SmoothHardware::PngFile pngFile(SmoothHardware::Path(L".\\Assets\\hi.png"));
 
-			int ratio = (int)sqrt(this->size);
+			float ratio = (int)sqrt(this->size);
 			int ratiox = ratio;
 			int ratioy = ratio;
-			int bX = pngFile.width / ratio;
-			int bY = pngFile.height / ratio;
+			float bX = pngFile.width / ratio;
+			float bY = pngFile.height / ratio;
 
-			MovingParticleData* head = newData->data();
+			std::vector<MovingParticleData*> shuffledData;
+			for (auto& d : *newData)
+				shuffledData.push_back(&d);
+
+			auto engine = mt19937_64((unsigned int)time(0));
+			std::shuffle(std::begin(shuffledData), std::end(shuffledData), engine);
+
+			MovingParticleData** head = shuffledData.data();
 
 			float spacing = 10.0f;
 			float offset = -(((ratiox * bX) / 2) * spacing);
@@ -134,10 +141,10 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 			{
 				for (int y = 0; y < ratioy; y++)
 				{
-					head->Accel = XMFLOAT3(0, 0, 0);
-					head->Target = XMFLOAT3(offset + ((x * bX) * spacing), offset + ((y * bY) * spacing), 0);
+					(*head)->Accel = XMFLOAT3(0, 0, 0);
+					(*head)->Target = XMFLOAT3(offset + ((x * bX) * spacing), offset + ((y * bY) * spacing), 0);
 					auto c = pngFile.Sample((1.0f / (float)ratiox)*x, (1.0f / (float)ratioy)*y);
-					head->TargetColour = XMFLOAT4(c.r, c.g, c.b, c.a);
+					(*head)->TargetColour = XMFLOAT4(c.r, c.g, c.b, c.a);
 					head++;
 				}
 			}

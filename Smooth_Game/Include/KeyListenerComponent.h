@@ -47,7 +47,6 @@ namespace SmoothGame
 				{
 					for (auto eve : this->events)
 					{
-
 						if (eve.keyUp ? this->inputStorage->lastKeys[eve.key] == 1 && this->inputStorage->keys[eve.key] == 0 : this->inputStorage->keys[eve.key])
 						{
 							if (eve.onKeyUp)
