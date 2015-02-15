@@ -51,6 +51,23 @@ HRESULT BufferController::Init()
 	return S_OK;
 }
 
+HRESULT BufferController::CreateDynamicConstantBuffer(const std::wstring& name, D3D11_BUFFER_DESC constantBufferDesc)
+{
+	ID3D11Buffer* buffer = nullptr;
+
+	auto hr = this->device->CreateBuffer(&constantBufferDesc, nullptr, &buffer);
+	if (SUCCEEDED(hr))
+	{
+		SetDebugObjectName(buffer, name);
+		this->AddBuffer(new DynamicConstantBuffer(name, buffer));
+		return S_OK;
+	}
+	else
+	{
+		return hr;
+	}
+}
+
 HRESULT BufferController::CreateConstantBuffer(const std::wstring& name, D3D11_BUFFER_DESC constantBufferDesc)
 {
 	ID3D11Buffer* buffer = nullptr;

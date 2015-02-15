@@ -24,6 +24,7 @@
 #include <UpdateComponent.h>
 #include <ModelRenderer.h>
 #include <Collider.h>
+#include <TopDownControllerInput.h>
 
 #include <FileSystem.h>
 #include <SetingsFile.h>
@@ -37,6 +38,7 @@
 #include <PickingData.h>
 
 #include <BézierCurve.h>
+#include <PotentialEngine.h>
 
 using namespace std;
 using namespace DirectX;
@@ -74,9 +76,6 @@ public:
 
 		engine->onCreateScene = [this]()
 		{
-			UINT cubeCount = 9;//81; Go on... try it...
-			UINT lightCount = 9;// 27;
-
 			bool renderFloor = true;
 
 			//Creates Camera giving it a position and a FPSController (along with XInput for demo only)
@@ -87,7 +86,6 @@ public:
 				{
 					*data->Position() = XMFLOAT3(0, 0, 0.5);
 				}),
-				new FPSControllerComponent(),
 				new XInputComponent(
 					1,
 					[=](Params params, XInputComponent* cThis)
@@ -106,16 +104,44 @@ public:
 				{
 					this->engine->Send(L"makeImage");
 				}),
+				KeyListenEvent('B', [&]
+				{
+					this->engine->Send(L"fluxColours");
+				}),
 			}));
 
-			int size = 8 * 8 * 8 * 16 * 16 * 4;
+			//Setup Game Engine
+			int subSize = 2;
+
+			int size = subSize * subSize * subSize * (16 * 16 * 4);
 			this->engine->AddObject(L"particles", {
 				new PositionComponent([](PositionalData* data)
 				{
 
 				}),
 				new BillboardRendererComponent(size),
-				new ComputeComponent(XMINT3(8, 8, 8)),
+			});
+
+			//Setup Player
+			auto player = this->engine->AddObject(L"Player", {
+				new PositionComponent([&](PositionalData* data){}),
+				new TopDownControllerComponent(),
+			});
+			auto topDownController = player->GetComponent<TopDownControllerComponent>();
+			player->AddComponent(
+				new KeyListenerComponent({
+				KeyListenEvent(38, [=]{topDownController->input.left = true; }, [=]{topDownController->input.left = false; }),
+				KeyListenEvent(40, [=]{topDownController->input.right = true; }, [=]{topDownController->input.right = false; }),
+				KeyListenEvent(39, [=]{topDownController->input.up = true; }, [=]{topDownController->input.up = false; }),
+				KeyListenEvent(37, [=]{topDownController->input.down = true; }, [=]{topDownController->input.down = false; }),
+			}));
+
+			auto p = std::vector < PositionComponent* > { player->GetComponent<PositionComponent>() };
+
+			//Setup Game
+			this->engine->AddObject(L"PotentialEngine", {
+				new ComputeComponent(XMINT3(subSize, subSize, subSize)),
+				new PotentialEngine(p),
 			});
 
 			//Load the previous settings

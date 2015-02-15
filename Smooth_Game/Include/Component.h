@@ -26,11 +26,16 @@ namespace SmoothGame
 
 		}
 
+		virtual HRESULT Init()
+		{
+			return S_OK;
+		}
+
 		HRESULT RecieveMessage(MessageName functionName, Params parameters);
 
 		HRESULT Send(MessageName name, Params param);
 
-		HRESULT DelayedSend(MessageName name, Params param);
+		HRESULT DelayedSend(MessageName name, Params param = {});
 
 		HRESULT SendAsync(MessageName name, Params param, std::function<void(HRESULT, Params)>);
 	};

@@ -91,11 +91,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\PotentialEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\BézierCurve.h" />
     <ClInclude Include="Include\ColourHelper.h" />
     <ClInclude Include="Include\Game.h" />
+    <ClInclude Include="Include\PotentialEngine.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

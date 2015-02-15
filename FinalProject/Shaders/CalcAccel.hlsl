@@ -22,12 +22,12 @@ void main(uint3 Gid : SV_GroupID, uint3 DTid : SV_DispatchThreadID, uint3 GTid :
 		accel += normalize(movingData[P_ID].Target - ParticlesRO[P_ID].Pos.xyz) * 400;
 	else if (d > 0.5)
 	{
-		movingData[P_ID].Accel = -ParticlesRO[P_ID].Vel / 10.0f;
+		//movingData[P_ID].Accel = -ParticlesRO[P_ID].Vel / 10.0f;
 	}
 	else
 	{
 
 	}
 	
-	movingData[P_ID].Accel = accel;
+	//movingData[P_ID].Accel = accel;
 }

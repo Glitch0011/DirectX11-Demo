@@ -34,10 +34,20 @@ namespace SmoothGraphics
 		}
 	};
 
+	struct PlayerData
+	{
+		DirectX::XMFLOAT3 Pos;
+		float index;
+	};
+
 	struct MovingParticleData
 	{
-		DirectX::XMFLOAT3 Accel;
-		DirectX::XMFLOAT3 Target;
 		DirectX::XMFLOAT4 TargetColour;
+		DirectX::XMFLOAT3 Target;
+		float State;
+		float Player;
+		float Padding1;
+		float Padding2;
+		float Padding3;
 	};
 }

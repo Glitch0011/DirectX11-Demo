@@ -7,9 +7,16 @@ struct Buff
 
 struct MovingParticleData
 {
-	float3 Accel;
-	float3 Target;
 	float4 TargetCol;
+	float3 Target;
+	float State;
+	float Player;
+	float3 Padding;
+};
+
+struct PlayerData
+{
+	float4 Pos;
 };
 
 struct VsIn

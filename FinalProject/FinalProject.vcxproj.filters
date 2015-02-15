@@ -28,6 +28,9 @@
     <ClCompile Include="Source\main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PotentialEngine.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -38,6 +41,9 @@
       <Filter>Include</Filter>
     </ClInclude>
     <ClInclude Include="Include\BézierCurve.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\PotentialEngine.h">
       <Filter>Include</Filter>
     </ClInclude>
   </ItemGroup>

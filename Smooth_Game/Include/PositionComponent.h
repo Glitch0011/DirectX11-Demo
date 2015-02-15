@@ -5,6 +5,7 @@
 #include <DirectXMath.h>
 #include <vector>
 #include <functional>
+#include <GameObject.h>
 
 using namespace std;
 using namespace DirectX;

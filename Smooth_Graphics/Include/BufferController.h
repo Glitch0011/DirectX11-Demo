@@ -43,7 +43,7 @@ namespace SmoothGraphics
 			bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 			bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-			return CreateConstantBuffer(name, bd);
+			return CreateDynamicConstantBuffer(name, bd);
 		}
 
 		template<class T> HRESULT CreateConstantBuffer(const std::wstring& name)
@@ -60,6 +60,7 @@ namespace SmoothGraphics
 		}
 
 		HRESULT CreateConstantBuffer(const std::wstring& name, D3D11_BUFFER_DESC constantBufferDesc);
+		HRESULT CreateDynamicConstantBuffer(const std::wstring& name, D3D11_BUFFER_DESC constantBufferDesc);
 
 		template<class T> HRESULT CreateStructuredBuffer(const std::wstring& name, UINT numberOfElements, T* data)
 		{

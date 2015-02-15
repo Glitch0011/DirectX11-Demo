@@ -13,6 +13,11 @@ namespace SmoothGame
 		double timePassed;
 	};
 
+	struct ElementDataBuffer
+	{
+		DirectX::XMUINT4 batchSize;
+	};
+
 	class ComputeComponent : public Renderer
 	{
 	private:

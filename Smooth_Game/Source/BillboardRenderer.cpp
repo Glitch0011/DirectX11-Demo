@@ -70,7 +70,7 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 				XMMatrixRotationY(objData->Rotation()->y) *
 				XMMatrixRotationZ(objData->Rotation()->z);
 
-			auto scale = 10;
+			auto scale = 20;
 			auto src = XMFLOAT3(scale, scale, scale);
 			worldMatrix = XMMatrixScalingFromVector(XMLoadFloat3(&src));
 
@@ -140,10 +140,11 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 			{
 				for (int y = 0; y < ratioy; y++)
 				{
-					(*head)->Accel = XMFLOAT3(0, 0, 0);
 					(*head)->Target = XMFLOAT3(offset + ((x * bX) * spacing), offset + ((y * bY) * spacing), 0);
 					auto c = pngFile.Sample((1.0f / (float)ratiox)*x, (1.0f / (float)ratioy)*y);
 					(*head)->TargetColour = XMFLOAT4(c.r, c.g, c.b, c.a);
+					(*head)->State = 1;
+					(*head)->Player = 0;
 					head++;
 				}
 			}
@@ -154,53 +155,39 @@ BillboardRendererComponent::BillboardRendererComponent(int size)
 		return S_OK;
 	};
 
-	/*this->functions[L"makeLandspace"] = [=](Params params)
+	this->functions[L"fluxColours"] = [=](Params params)
 	{
 		std::shared_future<void> asyncFunction = async(launch::async, [=]()
 		{
-			module::Perlin myModule;
-			myModule.SetSeed(clock());
-
-			utils::NoiseMap heightMap;
-			utils::NoiseMapBuilderPlane heightMapBuilder;
-			heightMapBuilder.SetSourceModule(myModule);
-			heightMapBuilder.SetDestNoiseMap(heightMap);
-			heightMapBuilder.SetDestSize((int)square_size.x, (int)square_size.y);
-			heightMapBuilder.SetBounds(2.0, 6.0, 1.0, 5.0);
-			heightMapBuilder.Build();
-
 			auto newData = new vector<MovingParticleData>(this->size);
 
-			auto randomEngine = new mt19937_64(); randomEngine->seed(clock());
-			auto distribution = new uniform_real_distribution<float>(0.0f, 1.0f);
+			std::vector<MovingParticleData*> shuffledData;
+			for (auto& d : *newData)
+				shuffledData.push_back(&d);
 
-			for (UINT i = 0; i < newData->size(); i++)
+			auto engine = mt19937_64((unsigned int)time(0));
+			std::shuffle(std::begin(shuffledData), std::end(shuffledData), engine);
+
+			mt19937_64 randomEngine; randomEngine.seed(clock());
+			uniform_real_distribution<float> distribution(-50, 50);
+			uniform_real_distribution<float> colourDist(0, 1);
+
+			MovingParticleData** head = shuffledData.data();
+
+			for (auto i = 0; i < newData->size(); ++i)
 			{
-				(*newData)[i].Accel = XMFLOAT3(0, 0, 0);
-
-				XMFLOAT2 spacing = XMFLOAT2((float)(square_size.x / sqrt(this->size)), (float)(square_size.y / sqrt(this->size)));
-				auto perRow = sqrt(this->size);
-
-				auto x = (float)fmod(i, perRow) * spacing.x;
-				auto z = (float)floor(i / perRow) * spacing.y;
-
-				auto a = heightMap.GetValue((int)x, (int)z) * 50;
-
-				(*newData)[i].Target = XMFLOAT3(
-					-(((float)perRow * spacing.x) / 2.0f) + x,
-					((1 + heightMap.GetValue((int)x, (int)z))/2) * 100,
-					-(((float)perRow * spacing.y) / 2.0f) + z);
-
-				(*newData)[i].TargetColour = XMFLOAT4(0.1, ((*newData)[i].Target.y - 10) / 50, 0.1, 1);
-				(*newData)[i].TargetScale = XMFLOAT3(1,1,1);
-				(*newData)[i].TargetRotation = XMFLOAT3((*distribution)(*randomEngine) * XM_2PI, (*distribution)(*randomEngine) * XM_2PI, (*distribution)(*randomEngine) * XM_2PI);
+				(*head)->Target = XMFLOAT3(distribution(randomEngine), distribution(randomEngine), distribution(randomEngine));
+				(*head)->TargetColour = XMFLOAT4(1, 1, 1, 0.5);// XMFLOAT4(colourDist(randomEngine), colourDist(randomEngine), colourDist(randomEngine), colourDist(randomEngine));
+				(*head)->State = 2;
+				(*head)->Player = 1;
+				head++;
 			}
 
-			this->DelayedSend(L"setLandspace", { newData });
+			this->DelayedSend(L"setData", { newData });
 		});
 
 		return S_OK;
-	};*/
+	};
 
 	this->functions[L"setData"] = [=](Params params)
 	{
@@ -227,19 +214,16 @@ HRESULT BillboardRendererComponent::Init()
 	this->graphics->CreateStructuredBuffer<SimpleVertex>(L"BasicBillboard", this->size, [&](UINT index, SimpleVertex* vertex)
 	{
 		vertex->Pos = XMFLOAT4((distribution)(randomEngine), (distribution)(randomEngine), 0, 1.0);
-		//vertex->Rotation = XMFLOAT3(0, 0, 0);
-		//vertex->Scale = XMFLOAT3(1, 1, 1);
-
 		vertex->Colour = XMFLOAT4((smallDist)(randomEngine), (smallDist)(randomEngine), (smallDist)(randomEngine), 1.0f);
 		vertex->Vel = XMFLOAT4(0, 0, 0, 0.0);
+
 		return S_OK;
 	});
-	this->graphics->CreateStructuredBuffer<SimpleVertex>(L"BasicBillboardCopy", this->size, nullptr);
+	
 
 	this->graphics->CreateStructuredBuffer<MovingParticleData>(L"MovingParticleData", this->size, [&](UINT index, void* _vertex)
 	{
 		MovingParticleData* vertex = (MovingParticleData*)_vertex;
-		vertex->Accel = XMFLOAT3((smallDist)(randomEngine), (smallDist)(randomEngine), (smallDist)(randomEngine));
 		vertex->Target = XMFLOAT3(0.0, 0.0, 0.0);
 		return S_OK;
 	});
@@ -267,6 +251,8 @@ HRESULT BillboardRendererComponent::Init()
 		*vertex = v[index];
 		return S_OK;
 	});
+
+	this->DelayedSend(L"fluxColours");
 
 	return res;
 }

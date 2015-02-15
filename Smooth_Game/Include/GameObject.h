@@ -49,9 +49,11 @@ namespace SmoothGame
 			this->name = name;
 		}
 
-		void Init()
+		HRESULT Init()
 		{
 			this->ID = (ID_TYPE)this->SendAndRecieve<void*>(L"getNewID");
+
+			return S_OK;
 		}
 
 		HRESULT SendProcess(MessageName functionName, Params parameters, std::function<void(HRESULT, Params)> callback = nullptr);
@@ -62,7 +64,7 @@ namespace SmoothGame
 
 		HRESULT DelayedSend(MessageName functionName, Params parameters)
 		{
-			toSendMessages.push_back(ToSendObject(functionName, parameters));
+			this->toSendMessages.push_back(ToSendObject(functionName, parameters));
 
 			return S_OK;
 		}

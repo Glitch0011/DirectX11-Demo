@@ -70,12 +70,27 @@ namespace SmoothHardware
 		{
 			int pixelX = x * this->width;
 			int pixelY = (1 - y) * this->height;
-			float* head = &this->data[((this->width * pixelY) + pixelX) * 4];
+			int index = ((this->width * pixelY) + pixelX);
+
 			Colour c;
-			c.r = *(head + 0);
-			c.g = *(head + 1);
-			c.b = *(head + 2);
-			c.a = *(head + 3);
+
+			if (index < this->width * this->height)
+			{
+
+				float* head = &this->data[index * 4];
+				
+				c.r = *(head + 0);
+				c.g = *(head + 1);
+				c.b = *(head + 2);
+				c.a = *(head + 3);
+			}
+			else
+			{
+				c.r = 0;
+				c.g = 0;
+				c.b = 0;
+				c.a = 1;
+			}
 			return c;
 		}
 	};

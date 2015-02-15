@@ -104,6 +104,7 @@
     <ClInclude Include="Include\Renderer.h" />
     <ClInclude Include="Include\SmoothGameTypeDefs.h" />
     <ClInclude Include="Include\StructuredBufferComponent.h" />
+    <ClInclude Include="Include\TopDownControllerInput.h" />
     <ClInclude Include="Include\UpdateComponent.h" />
     <ClInclude Include="Include\VectorFunctions.h" />
     <ClInclude Include="Include\XInputComponent.h" />
@@ -134,6 +135,7 @@
     <ClCompile Include="Source\PositionalData.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
     <ClCompile Include="Source\SphereCollider.cpp" />
+    <ClCompile Include="Source\TopDownControllerInput.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
