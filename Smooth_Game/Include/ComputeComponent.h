@@ -2,6 +2,7 @@
 #include <GraphicsEngine.h>
 #include <Component.h>
 #include <Renderer.h>
+#include <CachedVariable.h>
 
 using namespace SmoothGraphics;
 
@@ -22,10 +23,22 @@ namespace SmoothGame
 	{
 	private:
 		std::wstring shaderName;
-		XMINT3 batchSize;
+
+		CachedVariable<StructuredBuffer> objectBuffer,movingBuffer, playerBuffer;
+		CachedVariable<vector<PlayerData>> playerData;
+		CachedVariable<ConstantBuffer> timeConstBuffer, elementConstBuffer;
 
 	public:
+		XMINT3 batchSize;
+
 		ComputeComponent(XMINT3 batchSize);
+
 		HRESULT Init();
+		HRESULT Call(
+			std::wstring shaderName, 
+			std::vector<SmoothGraphics::ConstantBuffer*> constantBuffers,
+			std::vector<SmoothGraphics::StructuredBuffer*> uavBuffers,
+			DirectX::XMINT3 batchSize
+			);
 	};
 }

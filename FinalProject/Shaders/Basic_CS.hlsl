@@ -44,14 +44,14 @@ float3 Follow(uint id)
 
 	float speedFactor = 0.1;
 
-	if (length(vec) > 250)
+	if (length(vec) > 200)
 	{
 		accel.xyz += vecNorm * speedFactor;
 	}
 	else
 	{
 		float angle = atan2(vec.y, vec.x);
-		angle += 0.0174 * 5;
+		angle += 0.0174 * 10;
 		vecNorm = float3(sin(angle), -cos(angle), 0);
 
 		accel.xyz -= vecNorm * speedFactor;
@@ -61,12 +61,12 @@ float3 Follow(uint id)
 	return accel;
 }
 
-[numthreads(16, 16, 4)]
+[numthreads(BATCH_SIZE_X, BATCH_SIZE_Y, BATCH_SIZE_Z)]
 void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 {
 	//Work out where we are
 	uint3 gUint3 = batchSize.xyz;
-	uint3 tUint3 = uint3(16, 16, 4);
+	uint3 tUint3 = uint3(BATCH_SIZE_X, BATCH_SIZE_Y, BATCH_SIZE_Z);
 
 	const unsigned int groupMax = tUint3.x * tUint3.y * tUint3.z;
 	const unsigned int subGroupID = (((gUint3.z * groupID.z) * gUint3.y) + (gUint3.x * groupID.y) + groupID.x) * groupMax;
@@ -96,7 +96,14 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 
 	positionData[id].Pos += positionData[id].Vel;
 
+	/*positionData[id].ColVel += normalize(movingData[id].TargetCol - positionData[id].Col) * time;
+	positionData[id].ColVel = min(5, length(positionData[id].ColVel)) * normalize(positionData[id].ColVel);
+	positionData[id].ColVel *= 0.90;
+
+	positionData[id].Col += positionData[id].ColVel;*/
+
 	positionData[id].Col += normalize(movingData[id].TargetCol - positionData[id].Col) * time;
+	positionData[id].Col = saturate(positionData[id].Col);
 
 	/*int total = gUint3.x * gUint3.y * gUint3.z + tUint3.x + tUint3.y + tUint3.z;
 	float col = 0;

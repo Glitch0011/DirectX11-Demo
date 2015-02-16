@@ -118,8 +118,8 @@ public:
 					data->Position(XMFLOAT3(100, 0, 0));
 					data->Scale(XMFLOAT3(10, 10, 10));
 				}),
-					new TopDownControllerComponent(),
-					new SpriteRenderer(L"texture"),
+				new TopDownControllerComponent(),
+				new SpriteRenderer(L"texture"),
 			}));
 
 			auto topDownController = player->GetComponent<TopDownControllerComponent>();
@@ -136,10 +136,18 @@ public:
 				{
 					this->engine->Send(L"makeImage");
 				}),
-					KeyListenEvent('B', [&]
+				KeyListenEvent('B', [&]
 				{
 					this->engine->Send(L"fluxColours");
 				}),
+				KeyListenEvent('V', [&]
+				{
+					this->engine->Send(L"Pulse");
+				}, true),
+				KeyListenEvent('N', [&]
+				{
+					this->engine->Send(L"Fire");
+				}, true),
 			}));
 
 			auto p = std::vector < PositionComponent* > { player->GetComponent<PositionComponent>() };

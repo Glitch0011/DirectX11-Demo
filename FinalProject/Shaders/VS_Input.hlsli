@@ -1,3 +1,7 @@
+#define BATCH_SIZE_X 16
+#define BATCH_SIZE_Y 16
+#define BATCH_SIZE_Z 4
+
 struct Buff
 {
 	float4 Pos;

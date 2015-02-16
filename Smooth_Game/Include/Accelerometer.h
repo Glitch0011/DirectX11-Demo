@@ -29,7 +29,7 @@ namespace SmoothGame
 
 			this->Accel = DirectX::XMFLOAT3(0, 0, 0);
 
-			Multiply(&this->Vel, 0.95f);
+			Multiply(&this->Vel, 0.97f);
 
 			auto l = Length(this->Vel);
 			if (l > 10)

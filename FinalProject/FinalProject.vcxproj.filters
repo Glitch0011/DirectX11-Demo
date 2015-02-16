@@ -100,6 +100,9 @@
     <FxCompile Include="Shaders\Basic_VS.hlsl">
       <Filter>Shaders\Billboard Rendering</Filter>
     </FxCompile>
+    <FxCompile Include="Shaders\Pulse.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VS_Input.hlsli">

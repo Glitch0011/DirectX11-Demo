@@ -171,6 +171,16 @@ BillboardRendererComponent::BillboardRendererComponent(std::wstring textureName,
 		return S_OK;
 	};
 
+	this->functions[L"pulse"] = [=](Params params)
+	{
+		std::shared_future<void> asyncFunction = async(launch::async, [=]()
+		{
+			
+		});
+
+		return S_OK;
+	};
+
 	this->functions[L"setData"] = [=](Params params)
 	{
 		auto data = (vector<MovingParticleData>*)params[0];
@@ -205,11 +215,14 @@ HRESULT BillboardRendererComponent::Init()
 	this->graphics->CreateStructuredBuffer<MovingParticleData>(L"MovingParticleData", this->size, [&](UINT index, void* _vertex)
 	{
 		MovingParticleData* vertex = (MovingParticleData*)_vertex;
+		vertex->State = 0;
+		vertex->Player = 0;
 		vertex->Target = XMFLOAT3(0.0, 0.0, 0.0);
+		vertex->TargetColour = XMFLOAT4(0.5, 0.5, 0.5, 1.0);
 		return S_OK;
 	});
 
-	this->DelayedSend(L"fluxColours");
+	//this->DelayedSend(L"fluxColours");
 
 	return res;
 }
