@@ -61,6 +61,16 @@ PotentialEngine::PotentialEngine(std::vector<PositionComponent*> playerPositions
 
 	this->functions[L"Fire"] = [=](Params param)
 	{
+		auto fireConstantBuffer = this->graphics->Get<ConstantBuffer>(L"FireConstantBuffer");
+
+		FireData fireData;
+		fireData.dir = XMFLOAT4(1, 0, 0, 0);
+		fireConstantBuffer->Update(this->graphics->immediateContext, &fireData);
+
+		std::wstring shaderName = L"Fire_CS";
+		std::vector<ConstantBuffer*> extraBuffers{ fireConstantBuffer };
+
+		this->Send(L"Compute", { &shaderName, &extraBuffers });
 
 		return S_OK;
 	};
@@ -82,6 +92,7 @@ HRESULT PotentialEngine::Init()
 	});
 
 	this->graphics->bufferController->CreateDynamicConstantBuffer<PulseData>(L"PulseConstantBuffer");
+	this->graphics->bufferController->CreateDynamicConstantBuffer<FireData>(L"FireConstantBuffer");
 
 	return res;
 }

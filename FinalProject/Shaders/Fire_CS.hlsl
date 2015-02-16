@@ -15,29 +15,12 @@ cbuffer CS_ElementData : register(b1)
 	uint4 batchSize;
 }
 
-cbuffer CS_PulseData : register(b2)
+cbuffer CS_FireData : register(b2)
 {
-	float Strength;
-	float Type;
-	float StrengthMax;
-	float Padding2;
+	float4 targetDirection;
 }
 
-//http://www.chilliant.com/rgb2hsv.html
-float3 HUEtoRGB(in float H)
-{
-	float R = abs(H * 6 - 3) - 1;
-	float G = 2 - abs(H * 6 - 2);
-	float B = 2 - abs(H * 6 - 4);
-	return saturate(float3(R, G, B));
-}
-
-float3 HSLtoRGB(in float3 HSL)
-{
-	float3 RGB = HUEtoRGB(HSL.x);
-	float C = (1 - abs(2 * HSL.z - 1)) * HSL.y;
-	return (RGB - 0.5) * C + HSL.z;
-}
+static groupshared uint count = 0;
 
 [numthreads(BATCH_SIZE_X, BATCH_SIZE_Y, BATCH_SIZE_Z)]
 void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
@@ -52,11 +35,19 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 
 	const unsigned int id = subGroupID + subThreadID;
 
-	if (length(positionData[id].Pos - playerData[0].Pos) < Strength)
+	if (count < 10)
 	{
-		movingData[id].Player = 1;
-		movingData[id].State = 2;
-		movingData[id].TargetCol.xyz = HUEtoRGB(120.0 / 360.0) * (Strength / StrengthMax);
-		movingData[id].TargetCol.w = 0.9;
+		if (length(positionData[id].Pos - playerData[0].Pos) < 100)
+		{
+			InterlockedAdd(count, 1);
+
+			movingData[id].Padding = 2;
+			movingData[id].Target = targetDirection;
+			movingData[id].State = STATE_CHARGE;
+		}
+	}
+	else
+	{
+		abort();
 	}
 }

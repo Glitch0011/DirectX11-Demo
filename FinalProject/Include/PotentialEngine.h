@@ -30,6 +30,12 @@ public:
 	}
 };
 
+class FireData
+{
+public:
+	DirectX::XMFLOAT4 dir;
+};
+
 class PotentialEngine : public SmoothGame::Renderer
 {
 	std::vector<SmoothGraphics::PlayerData> playerData;

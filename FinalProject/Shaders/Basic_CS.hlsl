@@ -24,9 +24,25 @@ float3 Goto(uint id)
 	float4 accel = float4(0, 0, 0, 0);
 
 	if (length(vec) > 0.1)
-	{
 		accel.xyz += vecNorm * 0.1;
-	}
+	
+	return accel;
+}
+
+float3 Charge(uint id)
+{
+	float3 vec = movingData[id].Target;
+
+	float3 vecNorm = normalize(vec);
+
+	float4 accel = float4(0, 0, 0, 0);
+
+	accel.xyz += vecNorm * 0.1;
+
+	movingData[id].Padding.x -= time;
+
+	if (movingData[id].Padding.x < 0)
+		movingData[id].State = STATE_FOLLOW;
 
 	return accel;
 }
@@ -80,11 +96,14 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 	switch (movingData[id].State)
 	{
 		//1 = Goto
-		case 1:
+		case STATE_GOTO:
 			accel = Goto(id);
 			break;
-		case 2:
+		case STATE_FOLLOW:
 			accel = Follow(id);
+			break;
+		case STATE_CHARGE:
+			accel = Charge(id);
 			break;
 	}
 

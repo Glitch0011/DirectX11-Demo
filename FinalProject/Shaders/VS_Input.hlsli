@@ -2,6 +2,10 @@
 #define BATCH_SIZE_Y 16
 #define BATCH_SIZE_Z 4
 
+#define STATE_GOTO 1
+#define STATE_FOLLOW 2
+#define STATE_CHARGE 3
+
 struct Buff
 {
 	float4 Pos;
