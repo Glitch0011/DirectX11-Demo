@@ -23,22 +23,6 @@ cbuffer CS_PulseData : register(b2)
 	float Padding2;
 }
 
-//http://www.chilliant.com/rgb2hsv.html
-float3 HUEtoRGB(in float H)
-{
-	float R = abs(H * 6 - 3) - 1;
-	float G = 2 - abs(H * 6 - 2);
-	float B = 2 - abs(H * 6 - 4);
-	return saturate(float3(R, G, B));
-}
-
-float3 HSLtoRGB(in float3 HSL)
-{
-	float3 RGB = HUEtoRGB(HSL.x);
-	float C = (1 - abs(2 * HSL.z - 1)) * HSL.y;
-	return (RGB - 0.5) * C + HSL.z;
-}
-
 [numthreads(BATCH_SIZE_X, BATCH_SIZE_Y, BATCH_SIZE_Z)]
 void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 {

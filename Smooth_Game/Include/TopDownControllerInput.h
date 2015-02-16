@@ -15,6 +15,8 @@ namespace SmoothGame
 
 	class TopDownControllerComponent : public Component
 	{
+		XMFLOAT2 moveAxis;
+
 	public:
 		Accelerometer* accelerometer;
 		CachedVariable<PositionalData> objData;

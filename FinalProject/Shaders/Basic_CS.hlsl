@@ -1,4 +1,5 @@
 #include <VS_Input.hlsli>
+#include <Quadtree.hlsli>
 
 RWStructuredBuffer<Buff> positionData : register(t0);
 RWStructuredBuffer<MovingParticleData> movingData : register(t1);
@@ -33,11 +34,11 @@ float3 Charge(uint id)
 {
 	float3 vec = movingData[id].Target;
 
-	float3 vecNorm = normalize(vec);
+	float3 vecNorm = vec;
 
 	float4 accel = float4(0, 0, 0, 0);
 
-	accel.xyz += vecNorm * 0.1;
+	accel.xyz += vecNorm * 10.0f;
 
 	movingData[id].Padding.x -= time;
 
@@ -58,23 +59,74 @@ float3 Follow(uint id)
 
 	float4 accel = float4(0, 0, 0, 0);
 
-	float speedFactor = 0.1;
+	float speedFactor = 1.0;
 
-	if (length(vec) > 200)
+	float l = length(vec);
+	if (l > playerData[playerIndex].FollowRadius)
 	{
-		accel.xyz += vecNorm * speedFactor;
+		float distanceOver = max(l - playerData[playerIndex].FollowRadius, 0);
+		float strengthMult = min(1 * exp(distanceOver), 10);
+		accel.xyz += vecNorm * speedFactor * strengthMult;
 	}
 	else
 	{
-		float angle = atan2(vec.y, vec.x);
+		/*float angle = atan2(vec.y, vec.x);
 		angle += 0.0174 * 10;
 		vecNorm = float3(sin(angle), -cos(angle), 0);
 
 		accel.xyz -= vecNorm * speedFactor;
-		accel /= 2;
+		accel /= 2;*/
+
+		//accel.xyz -= vecNorm * speedFactor;
 	}
 
 	return accel;
+}
+
+float2 scanTree(int id, int treeIndex, float4 box)
+{
+	float2 accel = 0;
+	float2 pos = positionData[id].Pos.xy;
+
+	if (intersect(quadData[treeIndex].PosAndSize, box))
+	{
+		for (int i = 0; i < quadData[treeIndex].valueCount; i++)
+		{
+			Buff _positionalData = positionData[quadData[treeIndex].values[i]];
+			MovingParticleData _movingData = movingData[quadData[treeIndex].values[i]];
+
+			if (intersect(box, _positionalData.Pos))
+			{
+				float2 diff = pos - _positionalData.Pos.xy;
+				float l = length(diff);
+
+				float attract = 100;
+				float avoid = 50;
+
+				if (l > 0 && l < attract && l > avoid)
+				{
+					if (any(_positionalData.Vel.xy))
+						accel.xy += normalize(_positionalData.Vel.xy) * 2.5;
+
+					if (_movingData.State == STATE_CHARGE && _movingData.Player == 0)
+					{
+						_movingData.Player = 1;
+						_movingData.State = STATE_FOLLOW;
+						_movingData.TargetCol.xyz = HUEtoRGB(60.0 / 360.0);
+						_movingData.TargetCol.w = 0.5;
+					}
+				}
+				else if (l > 0 && l < avoid)
+				{
+					accel.xy += normalize(diff) * 10;
+				}
+			}
+		}
+
+		if (quadData[treeIndex].hasChildren)
+			for (int i = 0; i < CHILD_COUNT; i++)
+				scanTree(id, quadData[treeIndex].children[i], box);
+	}
 }
 
 [numthreads(BATCH_SIZE_X, BATCH_SIZE_Y, BATCH_SIZE_Z)]
@@ -90,37 +142,97 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 
 	const unsigned int id = subGroupID + subThreadID;
 
-	float3 accel;
+	float3 accel = float3(0, 0, 0);
+	unsigned int elementCount = batchSize.x * batchSize.y * batchSize.z * BATCH_SIZE_X * BATCH_SIZE_Y * BATCH_SIZE_Z;
+
+	float2 pos = positionData[id].Pos.xy;
+
+	float4 box;
+	box.xy = positionData[id].Pos - float2(100, 100);
+	box.zw = positionData[id].Pos + float2(100, 100);
+	scanTree(id, 0, box);
+
+	/*for (int i = 0; i < elementCount; i++)
+	{
+		float2 diff = pos - positionData[i].Pos.xy;
+		float l = length(diff);
+
+		float attract = 100;
+		float avoid = 50;
+		if (l > 0 && l < attract && l > avoid)
+		{
+			if (any(positionData[i].Vel.xy))
+				accel.xy += normalize(positionData[i].Vel.xy) * 2.5;
+
+			if (movingData[id].State == STATE_CHARGE && movingData[i].Player == 0)
+			{
+				movingData[i].Player = 1;
+				movingData[i].State = STATE_FOLLOW;
+				movingData[i].TargetCol.xyz = HUEtoRGB(60.0 / 360.0);
+				movingData[i].TargetCol.w = 0.5;
+			}
+		}
+		else if (l > 0 && l < avoid)
+		{
+			accel.xy += normalize(diff) * 10;
+
+		}
+	}*/
+
+	if (length(accel) > 0)
+		accel = normalize(accel) * 5;
 
 	//Now do the calculations
 	switch (movingData[id].State)
 	{
 		//1 = Goto
 		case STATE_GOTO:
-			accel = Goto(id);
+			accel += Goto(id);
 			break;
 		case STATE_FOLLOW:
-			accel = Follow(id);
+			accel += Follow(id);
 			break;
 		case STATE_CHARGE:
-			accel = Charge(id);
+			accel += Charge(id);
 			break;
 	}
 
-	positionData[id].Vel.xyz += accel;
+	if (length(accel) > 0)
+	{
+		positionData[id].Vel.xyz += accel;
+	}
 
-	positionData[id].Vel *= 0.99;
+	if (movingData[id].State == STATE_NONE)
+	{
+		positionData[id].Vel *= 0.80;
+	}
+	else
+	{
+		positionData[id].Vel *= 0.975f;// 0.975;
+	}
+	
 
-	positionData[id].Pos.xyz = positionData[id].Pos + (positionData[id].Vel * time) + (accel * time * time);
+	float3 nextPos = positionData[id].Pos + (positionData[id].Vel * time) + (accel * time * time);
+	//nextPos += positionData[id].Vel;
 
-	positionData[id].Pos += positionData[id].Vel;
+	float bounds = 500;
 
-	/*positionData[id].ColVel += normalize(movingData[id].TargetCol - positionData[id].Col) * time;
-	positionData[id].ColVel = min(5, length(positionData[id].ColVel)) * normalize(positionData[id].ColVel);
-	positionData[id].ColVel *= 0.90;
-
-	positionData[id].Col += positionData[id].ColVel;*/
-
+	if (nextPos.x > -bounds && 
+		nextPos.y > -bounds && 
+		nextPos.x < bounds && 
+		nextPos.y < bounds)
+	{
+		positionData[id].Pos.xyz = nextPos;
+	}
+	else
+	{
+		movingData[id].Player = 0;
+		movingData[id].State = STATE_NONE;
+		movingData[id].TargetCol.xyz = HUEtoRGB(0.0 / 360.0);
+		movingData[id].TargetCol.w = 0.5;
+		positionData[id].Vel *= -1;
+	}
+	
 	positionData[id].Col += normalize(movingData[id].TargetCol - positionData[id].Col) * time;
 	positionData[id].Col = saturate(positionData[id].Col);
 

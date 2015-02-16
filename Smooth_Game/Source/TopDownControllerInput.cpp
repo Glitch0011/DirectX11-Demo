@@ -3,6 +3,7 @@
 #include <GameObject.h>
 #include <vector>
 #include <VectorFunctions.h>
+#include <XInputComponent.h>
 
 using namespace SmoothGame;
 using namespace std;
@@ -10,6 +11,13 @@ using namespace std;
 TopDownControllerComponent::TopDownControllerComponent() : Component()
 {
 	objData = CachedVariable<PositionalData>(TO_FUNCTION(this->GameObject->SendAndRecieve<PositionalData*>(L"getPositionData")));
+
+	this->functions[L"setMove"] = [=](Params param)
+	{
+		moveAxis = *(XMFLOAT2*)param[0];
+
+		return S_OK;
+	};
 
 	this->functions[L"Update"] = [=](Params param)
 	{
@@ -37,6 +45,11 @@ TopDownControllerComponent::TopDownControllerComponent() : Component()
 			{
 				force.x -= speed;
 			}
+
+			auto thumbSpeed = 7.5f;
+
+			force.x += (moveAxis.x / (32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) * timePassedInSeconds * thumbSpeed;
+			force.y += (moveAxis.y / (32767 - XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE)) * timePassedInSeconds * thumbSpeed;
 
 			this->accelerometer->AddVelocity(force);
 		}

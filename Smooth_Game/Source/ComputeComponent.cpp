@@ -32,8 +32,6 @@ ComputeComponent::ComputeComponent(XMINT3 batchSize)
 			playerBuffer->Update(context, playerData->data());
 		}
 
-		void* blank = nullptr;
-
 		//Setup the time constant buffer
 		timeConstBuffer->Update(context, (vector<double> {*(double*)param[0], *(double*)param[1]}).data());
 

@@ -17,6 +17,17 @@ PotentialEngine::PotentialEngine(std::vector<PositionComponent*> playerPositions
 		return S_OK;
 	};
 
+	this->functions[L"setTrigger"] = [&](Params param)
+	{
+		auto playerID = param[0];
+		auto triggerVal = (double*)param[1];
+
+		auto maxRadius = 150;
+		this->playerData[0].followRadius = maxRadius - (*triggerVal * maxRadius);
+
+		return S_OK;
+	};
+
 	this->functions[L"Update"] = [=](Params param)
 	{
 		auto timePassed = static_cast<double*>(param[0]);
@@ -64,7 +75,10 @@ PotentialEngine::PotentialEngine(std::vector<PositionComponent*> playerPositions
 		auto fireConstantBuffer = this->graphics->Get<ConstantBuffer>(L"FireConstantBuffer");
 
 		FireData fireData;
-		fireData.dir = XMFLOAT4(1, 0, 0, 0);
+		XMFLOAT2 dir = *(XMFLOAT2*)param[0];
+		dir.x /= 32768;
+		dir.y /= 32768;
+		fireData.dir = XMFLOAT4(dir.x, dir.y, 0, 0);
 		fireConstantBuffer->Update(this->graphics->immediateContext, &fireData);
 
 		std::wstring shaderName = L"Fire_CS";

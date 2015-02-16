@@ -23,6 +23,9 @@
     <Filter Include="Shaders\Quad Shader">
       <UniqueIdentifier>{daa1236d-1fec-4581-a94b-2f60db31bac1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\Quadtree">
+      <UniqueIdentifier>{1910ddfe-1677-4874-be6a-f10108a88d52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -113,6 +116,9 @@
     </None>
     <None Include="Shaders\ModelRendering.hlsli">
       <Filter>Shaders\Model Rendering</Filter>
+    </None>
+    <None Include="Shaders\Quadtree.hlsli">
+      <Filter>Shaders\Quadtree</Filter>
     </None>
   </ItemGroup>
 </Project>

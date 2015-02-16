@@ -133,18 +133,14 @@ void GameEngine::UpdateConstantBuffers()
 		{
 			//Apply global translation
 			
-			
 			viewMatrix *= XMMatrixTranslation(-objData->Position()->x, -objData->Position()->y, -objData->Position()->z);
-			//viewMatrix *= XMMatrixScaling(0.5, 0.5, 0.5);
+			viewMatrix *= XMMatrixScaling(objData->Scale()->x, objData->Scale()->y, objData->Scale()->z);
 
 			//Rotation
 			viewMatrix *= XMMatrixRotationY(objData->Rotation()->y);
 			viewMatrix *= XMMatrixRotationZ(objData->Rotation()->z);
 			viewMatrix *= XMMatrixRotationX(objData->Rotation()->x);
 		}
-
-		//Scale
-		
 
 		BasicConstantBuffer buffer;
 

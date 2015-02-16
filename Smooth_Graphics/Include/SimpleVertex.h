@@ -38,6 +38,8 @@ namespace SmoothGraphics
 	{
 		DirectX::XMFLOAT3 Pos;
 		float index;
+		float followRadius;
+		DirectX::XMFLOAT3 Padding;
 	};
 
 	struct MovingParticleData

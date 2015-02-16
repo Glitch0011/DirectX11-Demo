@@ -21,6 +21,7 @@ cbuffer CS_FireData : register(b2)
 }
 
 static groupshared uint count = 0;
+static const float PI = 3.14159265f;
 
 [numthreads(BATCH_SIZE_X, BATCH_SIZE_Y, BATCH_SIZE_Z)]
 void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
@@ -35,19 +36,25 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 
 	const unsigned int id = subGroupID + subThreadID;
 
-	if (count < 10)
+	if (movingData[id].Player == 1 && movingData[id].State != STATE_CHARGE)
 	{
-		if (length(positionData[id].Pos - playerData[0].Pos) < 100)
+		float2 vect = positionData[id].Pos - playerData[0].Pos;
+		float l = length(vect);
+		if (l < 50)
 		{
-			InterlockedAdd(count, 1);
+			vect /= l;
 
-			movingData[id].Padding = 2;
-			movingData[id].Target = targetDirection;
-			movingData[id].State = STATE_CHARGE;
+			/*float angleA = atan2(targetDirection.y, targetDirection.x);
+			float angleB = atan2(vect.y, vect.x);
+
+			if (abs(angleA - angleB) < PI / (8 * 2))
+			{*/
+				movingData[id].Target = targetDirection;
+				movingData[id].State = STATE_CHARGE;
+
+				//Here used as a time
+				movingData[id].Padding = 2;
+			//}
 		}
-	}
-	else
-	{
-		abort();
 	}
 }

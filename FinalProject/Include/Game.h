@@ -51,6 +51,11 @@ using namespace SmoothHardware;
 HINSTANCE g_hInst = NULL;
 HWND g_hWnd = NULL;
 
+template <typename T> T clip(const T& n, const T& lower, const T& upper)
+{
+	return max(lower, min(n, upper));
+}
+
 class Game
 {
 public:
@@ -100,27 +105,79 @@ public:
 			}));*/
 
 			//Setup Game Engine
-			int subSize = 4;
+			int subSize = 1;// 2;
 
 			int size = subSize * subSize * subSize * (16 * 16 * 4);
+			float scale = 5;
 			this->engine->AddObject(L"particles", {
-				new PositionComponent([](PositionalData* data)
+				new PositionComponent([=](PositionalData* data)
 				{
-					data->Scale(XMFLOAT3(2.5, 2.5, 2.5));
+					data->Scale(XMFLOAT3(scale, scale, scale));// 2.5, 2.5, 2.5));
 				}),
 				new BillboardRendererComponent(L"texture", size),
 			});
 
-			//Setup Player
-			auto player = this->engine->SetCamera(this->engine->AddObject(L"Player", {
+			this->engine->SetCamera(this->engine->AddObject(L"Camera", {
 				new PositionComponent([&](PositionalData* data)
 				{
-					data->Position(XMFLOAT3(100, 0, 0));
+					data->Position(XMFLOAT3(0, 0, 0));
+					data->Scale(XMFLOAT3(0.9, 0.9, 0.9));
+				}),
+			}));
+			//Setup Player
+			auto player = this->engine->AddObject(L"Player", {
+				new PositionComponent([&](PositionalData* data)
+				{
+					data->Position(XMFLOAT3(0, 0, 0));
 					data->Scale(XMFLOAT3(10, 10, 10));
 				}),
 				new TopDownControllerComponent(),
 				new SpriteRenderer(L"texture"),
-			}));
+			});
+
+			player->AddComponent(new XInputComponent(
+				1,
+				[=](Params params, XInputComponent* cThis)
+				{
+					auto state = cThis->GetState().Gamepad;
+
+					auto a = XMFLOAT2(state.sThumbLX, state.sThumbLY);
+					{
+						auto deadZone = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE;
+
+						if (abs(a.x) < deadZone) a.x = 0;
+						if (abs(a.y) < deadZone) a.y = 0;
+
+						player->Send(L"setMove", { &a });
+					}
+
+					auto b = XMFLOAT2(state.sThumbRX, state.sThumbRY);
+					{
+						auto deadZone = XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE;
+
+						if (abs(b.x) < deadZone) b.x = 0;
+						if (abs(b.y) < deadZone) b.y = 0;
+
+						if (abs(b.x) > 0 || abs(b.y) > 0)
+						{
+							this->engine->Send(L"Fire", { &b });
+						}
+					}
+
+					if (state.wButtons & XINPUT_GAMEPAD_A)
+					{
+						this->engine->Send(L"Pulse");
+					}
+					if (state.wButtons & XINPUT_GAMEPAD_B)
+					{
+						this->engine->Send(L"fluxColours");
+					}
+
+					double trigger = clip<double>(state.bRightTrigger / (255.0 - XINPUT_GAMEPAD_TRIGGER_THRESHOLD), 0, 1);
+					this->engine->Send(L"setTrigger", { 0, &trigger });
+
+					return S_OK;
+				}));
 
 			auto topDownController = player->GetComponent<TopDownControllerComponent>();
 			player->AddComponent(
@@ -261,7 +318,7 @@ public:
 			return E_FAIL;
 
 		g_hInst = hInstance;
-		RECT rc = { 0, 0, 1280, 720 };
+		RECT rc = { 0, 0, 1000, 1000 };
 		AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
 
 		g_hWnd = CreateWindow(

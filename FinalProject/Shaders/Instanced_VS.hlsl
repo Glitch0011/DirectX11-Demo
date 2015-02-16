@@ -26,9 +26,9 @@ VsOut main(VsIn input, uint instanceID : SV_InstanceID, uint ID : SV_VertexID)
 
 	output.Pos = mul(output.Pos, transpose(World));
 
-	output.Pos = mul(output.Pos, View);
-
 	output.Pos += ParticlesRO[instanceID].Pos;
+
+	output.Pos = mul(output.Pos, View);
 
 	output.Pos = mul(output.Pos, Projection);
 
