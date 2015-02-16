@@ -6,12 +6,9 @@ using namespace SmoothGraphics;
 #include <GameObject.h>
 #include <PickingData.h>
 
-Renderer::Renderer()
+Renderer::Renderer() : Component()
 {
-	this->functions[L"Init"] = [=](Params params)
-	{
-		return this->Init();
-	};
+	
 }
 
 HRESULT Renderer::Init()

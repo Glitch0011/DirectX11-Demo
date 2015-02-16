@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Renderer.h>
+#include <SpriteRenderer.h>
 #include <BillboardVertexBuffer.h>
 #include <ConstantBuffer.h>
 #include <SimpleVertex.h>
@@ -11,17 +11,16 @@ using namespace SmoothGraphics;
 namespace SmoothGame
 {
 	class BillboardRendererComponent :
-		public Renderer
+		public SpriteRenderer
 	{
 	public:
 		volatile int size;
 		PositionalData* objData;
 
-		BillboardRendererComponent(int size);
+		BillboardRendererComponent(std::wstring texture, UINT32 size);
 
-		CachedVariable<TextureBuffer> texture;
-		CachedVariable<ID3D11SamplerState> samplerState;
+		CachedVariable<StructuredBuffer> billboardData;
 
-		HRESULT Init();
+		virtual HRESULT Init();
 	};
 }

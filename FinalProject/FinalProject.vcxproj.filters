@@ -88,13 +88,16 @@
     <FxCompile Include="Shaders\Basic_PS.hlsl">
       <Filter>Shaders\Billboard Rendering</Filter>
     </FxCompile>
-    <FxCompile Include="Shaders\Basic_VS.hlsl">
-      <Filter>Shaders\Billboard Rendering</Filter>
-    </FxCompile>
     <FxCompile Include="Shaders\CalcAccel.hlsl">
       <Filter>Shaders\Billboard Rendering</Filter>
     </FxCompile>
     <FxCompile Include="Shaders\Cube_GS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Instanced_VS.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\Basic_VS.hlsl">
       <Filter>Shaders\Billboard Rendering</Filter>
     </FxCompile>
   </ItemGroup>

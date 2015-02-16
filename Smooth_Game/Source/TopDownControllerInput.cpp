@@ -2,42 +2,57 @@
 
 #include <GameObject.h>
 #include <vector>
-#include <PositionData.h>
 #include <VectorFunctions.h>
 
 using namespace SmoothGame;
 using namespace std;
 
-TopDownControllerComponent::TopDownControllerComponent()
+TopDownControllerComponent::TopDownControllerComponent() : Component()
 {
+	objData = CachedVariable<PositionalData>(TO_FUNCTION(this->GameObject->SendAndRecieve<PositionalData*>(L"getPositionData")));
+
 	this->functions[L"Update"] = [=](Params param)
 	{
 		auto timePassedInSeconds = *((double*)param[0]);
 
-		auto objData = this->GameObject->SendAndRecieve<PositionalData*>(L"getPositionData");
-
-		auto speed = timePassedInSeconds * 100;
+		auto speed = timePassedInSeconds * 5;
 
 		if (objData != nullptr)
 		{
+			XMFLOAT3 force = XMFLOAT3(0, 0, 0);
+
 			if (this->input.up)
 			{
-				objData->Position()->x += speed;
+				force.x += speed;
 			}
 			if (this->input.left)
 			{
-				objData->Position()->y += speed;
+				force.y += speed;
 			}
 			if (this->input.right)
 			{
-				objData->Position()->y -= speed;
+				force.y -= speed;
 			}
 			if (this->input.down)
 			{
-				objData->Position()->x -= speed;
+				force.x -= speed;
 			}
+
+			this->accelerometer->AddVelocity(force);
 		}
+
+		this->accelerometer->Update(timePassedInSeconds);
 
 		return S_OK;
 	};
+}
+
+HRESULT TopDownControllerComponent::Init()
+{
+	auto res = Component::Init();
+
+	if (this->objData != nullptr)
+		accelerometer = new Accelerometer(this->objData->Position());
+
+	return res;
 }

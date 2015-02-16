@@ -1,5 +1,7 @@
 #include <VS_Input.hlsli>
 
+StructuredBuffer<Buff> ParticlesRO : register(t0);
+
 cbuffer VS_ConstantBuffer : register(b0)
 {
 	matrix View;
@@ -11,27 +13,30 @@ cbuffer VS_QuickConstantBuffer : register(b1)
 	matrix World;
 }
 
-VsOut main(VsIn input)
+VsOut main(VsIn input, uint instanceID : SV_InstanceID, uint ID : SV_VertexID)
 {
 	VsOut output = (VsOut)0;
 
-	output.Pos.xy += input.Pos;
+	output.Pos.xyzw = 0;
 
 	output.Pos.z = 0;
 	output.Pos.w = 1;
 
+	output.Pos.xy += input.Pos;
+
 	output.Pos = mul(output.Pos, transpose(World));
-	
+
 	output.Pos = mul(output.Pos, View);
+
+	output.Pos += ParticlesRO[instanceID].Pos;
 
 	output.Pos = mul(output.Pos, Projection);
 
-	output.Pos.z = 0;
-	output.Pos.w = 1;
+	output.Pos.zw = 1;
 
 	output.texCoord = input.texCoord;
 
-	output.col = float4(1, 1, 1, 1);
+	output.col = ParticlesRO[instanceID].Col;
 
 	return output;
 }

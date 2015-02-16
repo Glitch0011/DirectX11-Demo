@@ -16,8 +16,10 @@ namespace SmoothGame
 
 	public:
 		XMFLOAT3* Position();
+		void Position(XMFLOAT3 data);
 
 		XMFLOAT3* Scale();
+		void Scale(XMFLOAT3 data);
 
 		XMFLOAT3* Rotation();
 

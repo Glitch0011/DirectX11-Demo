@@ -21,6 +21,14 @@ namespace SmoothGame
 		GameObject* GameObject;
 		bool destroy = false;
 
+		Component()
+		{
+			this->functions[L"Init"] = [=](Params params)
+			{
+				return this->Init();
+			};
+		}
+
 		virtual ~Component()
 		{
 

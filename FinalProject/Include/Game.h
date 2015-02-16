@@ -39,6 +39,7 @@
 
 #include <BézierCurve.h>
 #include <PotentialEngine.h>
+#include <SpriteRenderer.h>
 
 using namespace std;
 using namespace DirectX;
@@ -79,7 +80,7 @@ public:
 			bool renderFloor = true;
 
 			//Creates Camera giving it a position and a FPSController (along with XInput for demo only)
-			auto camera = this->engine->SetCamera(this->engine->AddObject(L"camera",
+			/*auto camera = this->engine->SetCamera(this->engine->AddObject(L"camera",
 			{
 				new PositionComponent(
 				[=](PositionalData* data)
@@ -96,37 +97,31 @@ public:
 							cThis->Vibrate(0, 0);
 						return S_OK;
 					}),
-			}));
-
-			camera->AddComponent(new KeyListenerComponent(
-			{
-				KeyListenEvent(' ', [&]
-				{
-					this->engine->Send(L"makeImage");
-				}),
-				KeyListenEvent('B', [&]
-				{
-					this->engine->Send(L"fluxColours");
-				}),
-			}));
+			}));*/
 
 			//Setup Game Engine
-			int subSize = 2;
+			int subSize = 4;
 
 			int size = subSize * subSize * subSize * (16 * 16 * 4);
 			this->engine->AddObject(L"particles", {
 				new PositionComponent([](PositionalData* data)
 				{
-
+					data->Scale(XMFLOAT3(2.5, 2.5, 2.5));
 				}),
-				new BillboardRendererComponent(size),
+				new BillboardRendererComponent(L"texture", size),
 			});
 
 			//Setup Player
-			auto player = this->engine->AddObject(L"Player", {
-				new PositionComponent([&](PositionalData* data){}),
-				new TopDownControllerComponent(),
-			});
+			auto player = this->engine->SetCamera(this->engine->AddObject(L"Player", {
+				new PositionComponent([&](PositionalData* data)
+				{
+					data->Position(XMFLOAT3(100, 0, 0));
+					data->Scale(XMFLOAT3(10, 10, 10));
+				}),
+					new TopDownControllerComponent(),
+					new SpriteRenderer(L"texture"),
+			}));
+
 			auto topDownController = player->GetComponent<TopDownControllerComponent>();
 			player->AddComponent(
 				new KeyListenerComponent({
@@ -134,6 +129,17 @@ public:
 				KeyListenEvent(40, [=]{topDownController->input.right = true; }, [=]{topDownController->input.right = false; }),
 				KeyListenEvent(39, [=]{topDownController->input.up = true; }, [=]{topDownController->input.up = false; }),
 				KeyListenEvent(37, [=]{topDownController->input.down = true; }, [=]{topDownController->input.down = false; }),
+			}));
+			player->AddComponent(new KeyListenerComponent(
+			{
+				KeyListenEvent(' ', [&]
+				{
+					this->engine->Send(L"makeImage");
+				}),
+					KeyListenEvent('B', [&]
+				{
+					this->engine->Send(L"fluxColours");
+				}),
 			}));
 
 			auto p = std::vector < PositionComponent* > { player->GetComponent<PositionComponent>() };

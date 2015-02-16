@@ -44,14 +44,14 @@ float3 Follow(uint id)
 
 	float speedFactor = 0.1;
 
-	if (length(vec) > 200)
+	if (length(vec) > 250)
 	{
 		accel.xyz += vecNorm * speedFactor;
 	}
 	else
 	{
 		float angle = atan2(vec.y, vec.x);
-		angle += 0.0174;
+		angle += 0.0174 * 5;
 		vecNorm = float3(sin(angle), -cos(angle), 0);
 
 		accel.xyz -= vecNorm * speedFactor;
@@ -95,7 +95,6 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 	positionData[id].Pos.xyz = positionData[id].Pos + (positionData[id].Vel * time) + (accel * time * time);
 
 	positionData[id].Pos += positionData[id].Vel;
-	//positionData[id].Pos.z = 0;
 
 	positionData[id].Col += normalize(movingData[id].TargetCol - positionData[id].Col) * time;
 

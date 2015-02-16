@@ -81,6 +81,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Accelerometer.h" />
     <ClInclude Include="Include\BillboardRendererComponent.h" />
     <ClInclude Include="Include\BasicConstantBuffer.h" />
     <ClInclude Include="Include\Collider.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="Include\GameEngine.h" />
     <ClInclude Include="Include\GameObject.h" />
     <ClInclude Include="Include\HttpComponent.h" />
+    <ClInclude Include="Include\Hue.h" />
     <ClInclude Include="Include\InputListenerComponent.h" />
     <ClInclude Include="Include\InputStorage.h" />
     <ClInclude Include="Include\KeyListenerComponent.h" />
@@ -103,6 +105,7 @@
     <ClInclude Include="Include\PositionData.h" />
     <ClInclude Include="Include\Renderer.h" />
     <ClInclude Include="Include\SmoothGameTypeDefs.h" />
+    <ClInclude Include="Include\SpriteRenderer.h" />
     <ClInclude Include="Include\StructuredBufferComponent.h" />
     <ClInclude Include="Include\TopDownControllerInput.h" />
     <ClInclude Include="Include\UpdateComponent.h" />
@@ -135,6 +138,7 @@
     <ClCompile Include="Source\PositionalData.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
     <ClCompile Include="Source\SphereCollider.cpp" />
+    <ClCompile Include="Source\SpriteRenderer.cpp" />
     <ClCompile Include="Source\TopDownControllerInput.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

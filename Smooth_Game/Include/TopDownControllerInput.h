@@ -2,6 +2,9 @@
 
 #include <Component.h>
 #include <InputStorage.h>
+#include <Accelerometer.h>
+#include <CachedVariable.h>
+#include <PositionData.h>
 
 namespace SmoothGame
 {
@@ -13,8 +16,13 @@ namespace SmoothGame
 	class TopDownControllerComponent : public Component
 	{
 	public:
+		Accelerometer* accelerometer;
+		CachedVariable<PositionalData> objData;
+
 		TopDownControllerInput input;
 
 		TopDownControllerComponent();
+
+		virtual HRESULT Init();
 	};
 }
