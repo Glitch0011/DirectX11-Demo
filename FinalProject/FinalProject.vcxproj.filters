@@ -109,6 +109,12 @@
     <FxCompile Include="Shaders\Fire_CS.hlsl">
       <Filter>Shaders\Billboard Rendering</Filter>
     </FxCompile>
+    <FxCompile Include="Shaders\GridSetup.hlsl">
+      <Filter>Shaders\Billboard Rendering</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\FlatParticle.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\VS_Input.hlsli">
@@ -119,6 +125,9 @@
     </None>
     <None Include="Shaders\Quadtree.hlsli">
       <Filter>Shaders\Quadtree</Filter>
+    </None>
+    <None Include="Shaders\GridSystem.hlsli">
+      <Filter>Shaders\Billboard Rendering</Filter>
     </None>
   </ItemGroup>
 </Project>

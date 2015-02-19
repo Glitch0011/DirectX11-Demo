@@ -1,27 +1,15 @@
 #include <VS_Input.hlsli>
+#include <Quadtree.hlsli>
 
 RWStructuredBuffer<Buff> positionData : register(t0);
 RWStructuredBuffer<MovingParticleData> movingData : register(t1);
-RWStructuredBuffer<PlayerData> playerData : register(t2);
 
-cbuffer CS_ConstantBuffer : register(b0)
-{
-	double time;
-	double timeTotal;
-}
-
-cbuffer CS_ElementData : register(b1)
+cbuffer CS_ElementData : register(b0)
 {
 	uint4 batchSize;
 }
 
-cbuffer CS_FireData : register(b2)
-{
-	float4 targetDirection;
-}
-
-static groupshared uint count = 0;
-
+#include <GridSystem.hlsli>
 
 [numthreads(BATCH_SIZE_X, BATCH_SIZE_Y, BATCH_SIZE_Z)]
 void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
@@ -35,20 +23,16 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 	const unsigned int subThreadID = ((tUint3.x * groupThreadID.x) * tUint3.z) + (groupThreadID.z * tUint3.y) + groupThreadID.y;
 
 	const unsigned int id = subGroupID + subThreadID;
+	
+	uint index = GetGridIndexFromGridPos(GetGridPosFromWorldPos(positionData[id].Pos.xy));
 
-	if (movingData[id].Player == 1 && movingData[id].State != STATE_CHARGE)
+	if (movingData[id].Player == 0)
 	{
-		float2 vect = positionData[id].Pos - playerData[0].Pos;
-		float l = length(vect);
-		if (l < 50)
-		{
-			//vect /= l;
-
-			movingData[id].Target = targetDirection;
-			movingData[id].State = STATE_CHARGE;
-
-			//Here used as a time
-			movingData[id].Padding = 2;
-		}
+		InterlockedAdd(gridData[index].Count, 1);
+	}
+	else
+	{
+		gridData[index].Vel += positionData[id].Vel;
+		InterlockedAdd(gridData[index].Count, 10);
 	}
 }

@@ -35,10 +35,10 @@ namespace SmoothGame
 
 		HRESULT Init();
 		HRESULT Call(
-			std::wstring shaderName, 
-			std::vector<SmoothGraphics::ConstantBuffer*> constantBuffers,
-			std::vector<SmoothGraphics::StructuredBuffer*> uavBuffers,
-			DirectX::XMINT3 batchSize
+			std::wstring& shaderName, 
+			std::vector<SmoothGraphics::ConstantBuffer*>& constantBuffers,
+			std::vector<SmoothGraphics::StructuredBuffer*>& uavBuffers,
+			DirectX::XMINT3& batchSize
 			);
 	};
 }

@@ -28,5 +28,10 @@ namespace SmoothGame
 	public:
 		SpriteRenderer(std::wstring);
 		virtual HRESULT Init();
+
+		void SetPixelShader(std::wstring str)
+		{
+			this->pShader = CachedVariable<PixelShader>(TO_FUNCTION(this->graphics->GetShader<PixelShader>(str)));
+		}
 	};
 }

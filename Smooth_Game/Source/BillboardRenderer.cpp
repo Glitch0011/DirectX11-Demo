@@ -199,7 +199,7 @@ HRESULT BillboardRendererComponent::Init()
 	auto res = SpriteRenderer::Init();
 
 	mt19937_64 randomEngine; randomEngine.seed(clock());
-	uniform_real_distribution<float> distribution(-500, 500);
+	uniform_real_distribution<float> distribution(-495, 495);
 	uniform_real_distribution<float> smallDist(0.0f, 1.0f);
 
 	//Create Particle Data buffers

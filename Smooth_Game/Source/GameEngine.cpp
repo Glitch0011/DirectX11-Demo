@@ -132,7 +132,6 @@ void GameEngine::UpdateConstantBuffers()
 		if (objData != nullptr)
 		{
 			//Apply global translation
-			
 			viewMatrix *= XMMatrixTranslation(-objData->Position()->x, -objData->Position()->y, -objData->Position()->z);
 			viewMatrix *= XMMatrixScaling(objData->Scale()->x, objData->Scale()->y, objData->Scale()->z);
 

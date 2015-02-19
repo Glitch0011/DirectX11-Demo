@@ -646,7 +646,7 @@ HRESULT GraphicsEngine::CreateDepthStencilState()
 	ID3D11BlendState* d3dBlendState;
 	D3D11_BLEND_DESC omDesc;
 	ZeroMemory(&omDesc, sizeof(D3D11_BLEND_DESC));
-	omDesc.RenderTarget[0].BlendEnable = true;
+	omDesc.RenderTarget[0].BlendEnable = false;
 	omDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 	omDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 	omDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;

@@ -52,4 +52,10 @@ namespace SmoothGraphics
 		float Padding2;
 		float Padding3;
 	};
+
+	struct GridStructure
+	{
+	public:
+		DirectX::XMUINT4 Density;
+	};
 }

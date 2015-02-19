@@ -30,17 +30,32 @@ public:
 	}
 };
 
+class ScreenData
+{
+public:
+	DirectX::XMUINT2 screenSize;
+	DirectX::XMUINT2 gridSize;
+};
+
 class FireData
 {
 public:
 	DirectX::XMFLOAT4 dir;
 };
 
+class GridPoint
+{
+public:
+	unsigned int count;
+	DirectX::XMFLOAT2 vel;
+};
+
 class PotentialEngine : public SmoothGame::Renderer
 {
 	std::vector<SmoothGraphics::PlayerData> playerData;
 	std::vector<Pulse> pulses;
-	
+	int grid_size = 500;
+
 public:
 	PotentialEngine(std::vector<SmoothGame::PositionComponent*>);
 	HRESULT Init();

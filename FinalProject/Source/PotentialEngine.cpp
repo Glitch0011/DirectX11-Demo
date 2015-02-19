@@ -61,6 +61,52 @@ PotentialEngine::PotentialEngine(std::vector<PositionComponent*> playerPositions
 			}
 		}
 
+		{
+			std::wstring shaderName = L"GridSetup";
+
+			std::vector<ConstantBuffer*> constantBuffers;
+			auto constantBuffer = this->graphics->Get<ConstantBuffer>(L"ScreenConstantBuffer");
+			{
+				ScreenData data;
+				data.screenSize = XMUINT2(1000, 1000);
+				data.gridSize = XMUINT2(grid_size, grid_size);
+				constantBuffer->Update(this->graphics->immediateContext, &data);
+			}
+
+			constantBuffers.push_back(this->graphics->Get<DynamicConstantBuffer>(L"ElementConstantBuffer"));
+			constantBuffers.push_back(nullptr);
+			constantBuffers.push_back(constantBuffer);
+
+			std::vector<StructuredBuffer*> structuredBuffers;
+			auto gridSystem = this->graphics->Get<StructuredBuffer>(L"GridSystem");
+
+			GridPoint* data = (GridPoint*)calloc(grid_size * grid_size, sizeof(GridPoint));
+			gridSystem->Update(this->graphics->immediateContext, data);
+			free(data);
+
+			structuredBuffers.push_back(this->graphics->Get<StructuredBuffer>(L"BasicBillboard"));
+			structuredBuffers.push_back(this->graphics->Get<StructuredBuffer>(L"MovingParticleData"));
+			structuredBuffers.push_back(gridSystem);
+
+			this->Send(L"ComputeRaw", { &shaderName, &constantBuffers, &structuredBuffers });
+		}
+
+		{
+			std::wstring shaderName = L"Basic_CS";
+
+			std::vector<ConstantBuffer*> constantBuffers;
+			auto constantBuffer = this->graphics->Get<ConstantBuffer>(L"ScreenConstantBuffer");
+
+			constantBuffers.push_back(constantBuffer);
+
+			std::vector<StructuredBuffer*> structuredBuffers;
+			auto gridSystem = this->graphics->Get<StructuredBuffer>(L"GridSystem");
+			
+			structuredBuffers.push_back(gridSystem);
+
+			this->Send(L"Compute", { &shaderName, &constantBuffers, &structuredBuffers });
+		}
+
 		return S_OK;
 	}; 
 	
@@ -107,6 +153,15 @@ HRESULT PotentialEngine::Init()
 
 	this->graphics->bufferController->CreateDynamicConstantBuffer<PulseData>(L"PulseConstantBuffer");
 	this->graphics->bufferController->CreateDynamicConstantBuffer<FireData>(L"FireConstantBuffer");
+
+	this->graphics->CreateStructuredBuffer<GridPoint>(L"GridSystem", grid_size * grid_size, [](UINT index, GridPoint* vertex)
+	{
+		//vertex->count = 0;
+		//vertex->vel = 
+		return S_OK;
+	});
+
+	this->graphics->bufferController->CreateDynamicConstantBuffer<ScreenData>(L"ScreenConstantBuffer");
 
 	return res;
 }

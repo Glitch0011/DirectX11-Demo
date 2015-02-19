@@ -105,7 +105,7 @@ public:
 			}));*/
 
 			//Setup Game Engine
-			int subSize = 1;// 2;
+			int subSize = 8;// 2;
 
 			int size = subSize * subSize * subSize * (16 * 16 * 4);
 			float scale = 5;
@@ -117,15 +117,28 @@ public:
 				new BillboardRendererComponent(L"texture", size),
 			});
 
-			this->engine->SetCamera(this->engine->AddObject(L"Camera", {
+			auto camera = this->engine->SetCamera(this->engine->AddObject(L"Camera", {
 				new PositionComponent([&](PositionalData* data)
 				{
 					data->Position(XMFLOAT3(0, 0, 0));
 					data->Scale(XMFLOAT3(0.9, 0.9, 0.9));
 				}),
 			}));
+
+			/*auto flatParticle = this->engine->AddObject(L"FlatParticle",
+			{
+				new PositionComponent([&](PositionalData* data)
+				{
+					data->Position(XMFLOAT3(0, 0, 0));
+					data->Scale(XMFLOAT3(500, 500, 1.0));
+				}),
+				new SpriteRenderer(L"texture"),
+			});
+			flatParticle->GetComponent<SpriteRenderer>()->SetPixelShader(L"FlatParticle");*/
+
 			//Setup Player
-			auto player = this->engine->AddObject(L"Player", {
+			auto player = this->engine->AddObject(L"Player", 
+			{
 				new PositionComponent([&](PositionalData* data)
 				{
 					data->Position(XMFLOAT3(0, 0, 0));

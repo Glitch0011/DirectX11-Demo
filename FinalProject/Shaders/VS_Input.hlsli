@@ -7,6 +7,8 @@
 #define STATE_FOLLOW 2
 #define STATE_CHARGE 3
 
+static const float PI = 3.14159265f;
+
 //http://www.chilliant.com/rgb2hsv.html
 float3 HUEtoRGB(in float H)
 {

@@ -57,10 +57,22 @@ SpriteRenderer::SpriteRenderer(std::wstring textureName)
 		IF_NOT_NULL(this->samplerState, context->PSSetSamplers(0, 1, &this->samplerState.value));
 		IF_NOT_NULL(this->texture, context->PSSetShaderResources(0, 1, &this->texture->srvResourceView));
 
+		//auto gridSystem = this->graphics->Get<StructuredBuffer>(L"GridSystem");
+		//context->PSSetShaderResources(2, 1, &gridSystem->srvResourceView);
+		
+		//context->PSSetConstantBuffers(0, 1, &this->graphics->Get<DynamicConstantBuffer>(L"ElementConstantBuffer")->buffer);
+		//context->PSSetConstantBuffers(2, 1, &this->graphics->Get<DynamicConstantBuffer>(L"ScreenConstantBuffer")->buffer);
+
 		indexBuffer->Draw(context);
 
 		ID3D11ShaderResourceView* const g_pNullSRV = nullptr;
+		ID3D11Buffer* const nullBuffer = nullptr;
+
 		context->VSSetShaderResources(0, 1, &g_pNullSRV);
+
+		context->PSSetShaderResources(0, 1, &g_pNullSRV);
+		context->PSSetShaderResources(2, 1, &g_pNullSRV);
+		context->PSSetConstantBuffers(0, 1, &nullBuffer);
 
 		return S_OK;
 	};

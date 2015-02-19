@@ -25,28 +25,17 @@ ComputeComponent::ComputeComponent(XMINT3 batchSize)
 	{
 		auto context = this->graphics->immediateContext;
 
-		{
-			if (playerBuffer->elementCount != playerData->size())
-				return S_OK;
+		if (playerBuffer->elementCount != playerData->size())
+			return S_OK;
 
-			playerBuffer->Update(context, playerData->data());
-		}
-
-		//Setup the time constant buffer
+		playerBuffer->Update(context, playerData->data());
 		timeConstBuffer->Update(context, (vector<double> {*(double*)param[0], *(double*)param[1]}).data());
 
-		auto elementConstBuffer = this->graphics->Get<DynamicConstantBuffer>(L"ElementConstantBuffer");
 		{
 			ElementDataBuffer buffer;
 			buffer.batchSize = DirectX::XMUINT4(this->batchSize.x, this->batchSize.y, this->batchSize.z, 0);
 			elementConstBuffer->Update(context, &buffer);
 		}
-
-		this->Call(
-			L"Basic_CS",
-			{ timeConstBuffer, elementConstBuffer },
-			{ objectBuffer, movingBuffer, playerBuffer },
-			this->batchSize);
 
 		return S_OK;
 	};
@@ -56,6 +45,7 @@ ComputeComponent::ComputeComponent(XMINT3 batchSize)
 		std::wstring* shaderName = static_cast<std::wstring*>(param[0]);
 
 		std::vector<ConstantBuffer*> buffers{ timeConstBuffer, elementConstBuffer };
+		std::vector<StructuredBuffer*> structuredBuffers{ objectBuffer, movingBuffer, playerBuffer };
 
 		if (param.size() > 1)
 		{
@@ -63,11 +53,46 @@ ComputeComponent::ComputeComponent(XMINT3 batchSize)
 			for (auto buffer : *extraBuffers)
 				buffers.push_back(buffer);
 		}
+		if (param.size() > 2)
+		{
+			auto extraBuffers = static_cast<std::vector<StructuredBuffer*>*>(param[2]);
+			for (auto buffer : *extraBuffers)
+				structuredBuffers.push_back(buffer);
+		}
 
 		this->Call(
 			*shaderName,
 			buffers,
-			{ objectBuffer, movingBuffer, playerBuffer },
+			structuredBuffers,
+			this->batchSize);
+
+		return S_OK;
+	};
+
+	this->functions[L"ComputeRaw"] = [&](Params param)
+	{
+		std::wstring* shaderName = static_cast<std::wstring*>(param[0]);
+
+		std::vector<ConstantBuffer*> buffers;
+		std::vector<StructuredBuffer*> structuredBuffers;
+
+		if (param.size() > 1)
+		{
+			auto extraBuffers = static_cast<std::vector<ConstantBuffer*>*>(param[1]);
+			for (auto buffer : *extraBuffers)
+				buffers.push_back(buffer);
+		}
+		if (param.size() > 2)
+		{
+			auto extraBuffers = static_cast<std::vector<StructuredBuffer*>*>(param[2]);
+			for (auto buffer : *extraBuffers)
+				structuredBuffers.push_back(buffer);
+		}
+
+		this->Call(
+			*shaderName,
+			buffers,
+			structuredBuffers,
 			this->batchSize);
 
 		return S_OK;
@@ -75,24 +100,21 @@ ComputeComponent::ComputeComponent(XMINT3 batchSize)
 }
 
 HRESULT ComputeComponent::Call(
-	std::wstring shaderName,
-	std::vector<SmoothGraphics::ConstantBuffer*> constantBuffers,
-	std::vector<SmoothGraphics::StructuredBuffer*> uavBuffers,
-	DirectX::XMINT3 batchSize
+	std::wstring& shaderName,
+	std::vector<SmoothGraphics::ConstantBuffer*>& constantBuffers,
+	std::vector<SmoothGraphics::StructuredBuffer*>& uavBuffers,
+	DirectX::XMINT3& batchSize
 	)
 {
 	auto context = this->graphics->immediateContext;
 
 	auto shader = graphics->GetShader(shaderName);
+	void* null = nullptr;
 	for (int i = 0; i < constantBuffers.size(); i++)
-	{
-		context->CSSetConstantBuffers(i, 1, &constantBuffers[i]->buffer);
-	}
+		context->CSSetConstantBuffers(i, 1, constantBuffers[i] != nullptr ? &constantBuffers[i]->buffer : (ID3D11Buffer**)&null);
 	for (int i = 0; i < uavBuffers.size(); i++)
-	{
-		context->CSSetUnorderedAccessViews(i, 1, &uavBuffers[i]->uavResourceView, nullptr);
-	}
-
+		context->CSSetUnorderedAccessViews(i, 1, uavBuffers[i] != nullptr ? &uavBuffers[i]->uavResourceView : (ID3D11UnorderedAccessView**)&null, nullptr);
+	
 	graphics->DispatchComputeShader(batchSize, shader);
 
 	void* blank = nullptr;
@@ -101,7 +123,6 @@ HRESULT ComputeComponent::Call(
 		context->CSSetShaderResources(i, 1, (ID3D11ShaderResourceView**)&blank);
 	for (int i = 0; i < uavBuffers.size(); i++)
 		context->CSSetUnorderedAccessViews(i, 1, (ID3D11UnorderedAccessView**)&blank, nullptr);
-	
 
 	return S_OK;
 }
