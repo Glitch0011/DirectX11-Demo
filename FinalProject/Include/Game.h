@@ -105,7 +105,7 @@ public:
 			}));*/
 
 			//Setup Game Engine
-			int subSize = 8;// 2;
+			int subSize = 4;// 2;
 
 			int size = subSize * subSize * subSize * (16 * 16 * 4);
 			float scale = 5;

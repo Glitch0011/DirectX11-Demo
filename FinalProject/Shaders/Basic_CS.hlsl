@@ -161,8 +161,29 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 
 	uint2 uintPos = GetGridPosFromWorldPos(positionData[id].Pos.xy);
 
-	accel.xy += GetLocalVector(uintPos) * 0.001;
+	accel.xy += GetLocalVector(uintPos, 1) * 0.01;
 	
+	float wallForce = 0.0001f;
+
+	if (pos.x < 0)
+	{
+		accel.x += wallForce;
+	}
+	else
+	{
+		accel.x -= wallForce;
+	}
+
+	if (pos.y < 0)
+	{
+		accel.y += wallForce;
+	}
+	else
+	{
+		accel.y -= wallForce;
+	}
+
+
 	if (length(accel) > 0)
 		accel = normalize(accel);
 
@@ -221,7 +242,10 @@ void main(uint3 groupThreadID : SV_GroupThreadID, uint3 groupID : SV_GroupID)
 		movingData[id].State = STATE_NONE;
 		movingData[id].TargetCol.xyz = HUEtoRGB(0.0 / 360.0);
 		movingData[id].TargetCol.w = 0.5;*/
+		
 		positionData[id].Vel *= -0.1f;
+		positionData[id].Pos.xyz = positionData[id].Pos + (positionData[id].Vel * 1);
+		
 	}
 	
 	//positionData[id].Col += normalize(movingData[id].TargetCol - positionData[id].Col) * time;

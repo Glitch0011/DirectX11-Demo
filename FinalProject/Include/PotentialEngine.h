@@ -54,7 +54,7 @@ class PotentialEngine : public SmoothGame::Renderer
 {
 	std::vector<SmoothGraphics::PlayerData> playerData;
 	std::vector<Pulse> pulses;
-	int grid_size = 500;
+	int grid_size = 100;
 
 public:
 	PotentialEngine(std::vector<SmoothGame::PositionComponent*>);
